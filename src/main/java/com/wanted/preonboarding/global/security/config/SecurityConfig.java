@@ -1,8 +1,8 @@
-package com.wanted.preonboarding.security.config;
+package com.wanted.preonboarding.global.security.config;
 
-import com.wanted.preonboarding.security.handler.UserAccessDeniedHandler;
-import com.wanted.preonboarding.security.handler.UserAuthenticationEntryPoint;
-import com.wanted.preonboarding.security.jwt.JwtTokenProvider;
+import com.wanted.preonboarding.global.security.handler.UserAccessDeniedHandler;
+import com.wanted.preonboarding.global.security.handler.UserAuthenticationEntryPoint;
+import com.wanted.preonboarding.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

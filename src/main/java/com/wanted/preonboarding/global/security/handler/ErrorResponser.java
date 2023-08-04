@@ -1,8 +1,6 @@
-package com.wanted.preonboarding.security.handler;
+package com.wanted.preonboarding.global.security.handler;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.wanted.preonboarding.util.Mapper;
-import jakarta.servlet.http.HttpServletRequest;
+import com.wanted.preonboarding.global.security.util.Mapper;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.AccessLevel;

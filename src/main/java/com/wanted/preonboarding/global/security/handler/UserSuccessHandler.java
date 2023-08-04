@@ -1,8 +1,8 @@
-package com.wanted.preonboarding.security.handler;
+package com.wanted.preonboarding.global.security.handler;
 
 import com.wanted.preonboarding.domain.user.entity.User;
-import com.wanted.preonboarding.security.details.UserDetailsEntity;
-import com.wanted.preonboarding.security.jwt.JwtTokenProvider;
+import com.wanted.preonboarding.global.security.details.UserDetailsEntity;
+import com.wanted.preonboarding.global.security.jwt.JwtTokenProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

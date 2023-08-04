@@ -1,4 +1,4 @@
-package com.wanted.preonboarding.security.details;
+package com.wanted.preonboarding.global.security.details;
 
 import com.wanted.preonboarding.domain.user.entity.User;
 import com.wanted.preonboarding.domain.user.repository.UserRepository;

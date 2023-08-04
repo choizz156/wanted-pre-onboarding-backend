@@ -1,4 +1,4 @@
-package com.wanted.preonboarding.security.dto;
+package com.wanted.preonboarding.global.security.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;

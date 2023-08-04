@@ -1,6 +1,6 @@
-package com.wanted.preonboarding.security.filter;
+package com.wanted.preonboarding.global.security.filter;
 
-import com.wanted.preonboarding.security.jwt.JwtTokenProvider;
+import com.wanted.preonboarding.global.security.jwt.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;

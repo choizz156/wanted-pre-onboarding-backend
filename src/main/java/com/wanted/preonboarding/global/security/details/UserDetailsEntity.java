@@ -1,9 +1,8 @@
-package com.wanted.preonboarding.security.details;
+package com.wanted.preonboarding.global.security.details;
 
 import com.wanted.preonboarding.domain.user.entity.User;
 import java.util.Collection;
 import lombok.Builder;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

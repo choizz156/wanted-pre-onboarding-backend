@@ -1,4 +1,4 @@
-package com.wanted.preonboarding.security.jwt;
+package com.wanted.preonboarding.global.security.jwt;
 
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;

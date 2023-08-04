@@ -1,4 +1,4 @@
-package com.wanted.preonboarding.util;
+package com.wanted.preonboarding.global.security.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;

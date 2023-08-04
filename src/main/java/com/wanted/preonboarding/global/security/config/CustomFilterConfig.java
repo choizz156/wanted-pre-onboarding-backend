@@ -1,10 +1,10 @@
-package com.wanted.preonboarding.security.config;
+package com.wanted.preonboarding.global.security.config;
 
-import com.wanted.preonboarding.security.filter.JwtLoginFilter;
-import com.wanted.preonboarding.security.filter.JwtVerificationFilter;
-import com.wanted.preonboarding.security.handler.UserFailureHandler;
-import com.wanted.preonboarding.security.handler.UserSuccessHandler;
-import com.wanted.preonboarding.security.jwt.JwtTokenProvider;
+import com.wanted.preonboarding.global.security.filter.JwtLoginFilter;
+import com.wanted.preonboarding.global.security.filter.JwtVerificationFilter;
+import com.wanted.preonboarding.global.security.handler.UserFailureHandler;
+import com.wanted.preonboarding.global.security.handler.UserSuccessHandler;
+import com.wanted.preonboarding.global.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

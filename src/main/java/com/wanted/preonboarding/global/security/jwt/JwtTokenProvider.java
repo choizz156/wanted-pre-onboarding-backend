@@ -1,4 +1,4 @@
-package com.wanted.preonboarding.security.jwt;
+package com.wanted.preonboarding.global.security.jwt;
 
 import com.wanted.preonboarding.domain.user.entity.User;
 import io.jsonwebtoken.Claims;

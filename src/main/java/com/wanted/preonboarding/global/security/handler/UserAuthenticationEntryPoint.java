@@ -1,4 +1,4 @@
-package com.wanted.preonboarding.security.handler;
+package com.wanted.preonboarding.global.security.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
