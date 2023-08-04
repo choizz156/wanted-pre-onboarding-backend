@@ -28,7 +28,6 @@ class UserTest {
         //given
         UserPostDto dto = new UserPostDto("test@gmail.com", "testdfd11");
 
-
         //when
         userService.signUp(dto);
 
