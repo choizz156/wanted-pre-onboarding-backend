@@ -7,6 +7,7 @@ import com.wanted.preonboarding.web.dto.UserPostDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -16,10 +17,15 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void signUp(UserPostDto userPostDto){
-        User entity = userPostDto.toEntity();
-        userRepository.save(entity);
-        log.info("회원 가입 완료");
+        User user = userPostDto.toEntity();
+        String encodedPwd = passwordEncoder.encode(userPostDto.password());
+
+        user.applyEncryptPassword(encodedPwd);
+
+        userRepository.save(user);
+        log.info("join complete");
     }
 }
