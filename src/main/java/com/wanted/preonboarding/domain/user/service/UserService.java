@@ -6,12 +6,12 @@ import com.wanted.preonboarding.domain.user.repository.UserRepository;
 import com.wanted.preonboarding.global.exception.BusinessLoginException;
 import com.wanted.preonboarding.global.exception.ExceptionCode;
 import com.wanted.preonboarding.web.dto.JoinDto;
-import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -22,7 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void signUp(JoinDto joinDto){
+    public User signUp(JoinDto joinDto){
         verifyDuplicationEmail(joinDto.email());
 
         User user = joinDto.toEntity();
@@ -31,6 +31,14 @@ public class UserService {
         user.applyEncryptPassword(encodedPwd);
         userRepository.save(user);
         log.info("join complete");
+
+        return user;
+    }
+
+    @Transactional(readOnly = true)
+    public User findUser(final Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        return userOptional.orElseThrow(() -> new BusinessLoginException(ExceptionCode.NOT_FOUND_USER));
     }
 
     private void verifyDuplicationEmail(final String email) {
