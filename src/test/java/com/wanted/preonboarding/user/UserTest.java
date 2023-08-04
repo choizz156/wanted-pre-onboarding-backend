@@ -8,6 +8,8 @@ import com.wanted.preonboarding.domain.user.service.UserService;
 import com.wanted.preonboarding.web.dto.UserPostDto;
 import java.util.List;
 import java.util.Optional;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,11 @@ class UserTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @BeforeEach
+    void setUp() {
+        userRepository.deleteAllInBatch();
+    }
 
     @DisplayName("회원 가입을 할 수 있다.")
     @Test
