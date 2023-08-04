@@ -9,9 +9,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = PROTECTED)
 @Entity
 @Table(name = "users")
@@ -28,10 +31,8 @@ public class User extends BaseEntity {
     private String password;
 
     @Builder
-    private User(final String email, final String password) {
+    public User(final String email, final String password) {
         this.email = email;
         this.password = password;
     }
-
-    public static User create()
 }
