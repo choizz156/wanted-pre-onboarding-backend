@@ -34,7 +34,7 @@ public class User extends BaseEntity {
     private String password;
 
     @Enumerated(STRING)
-    private UserRoles roles;
+    private UserRoles roles = UserRoles.USER;
 
     @Builder
     public User(final String email, final String password) {
