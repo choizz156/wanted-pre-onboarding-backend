@@ -39,7 +39,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(final HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(final HttpServletRequest request) {
         log.info("check token");
         String authorization = request.getHeader("Authorization");
 
