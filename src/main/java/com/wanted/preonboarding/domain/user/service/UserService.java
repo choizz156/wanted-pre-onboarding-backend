@@ -5,7 +5,7 @@ import com.wanted.preonboarding.domain.user.entity.User;
 import com.wanted.preonboarding.domain.user.repository.UserRepository;
 import com.wanted.preonboarding.global.exception.BusinessLoginException;
 import com.wanted.preonboarding.global.exception.ExceptionCode;
-import com.wanted.preonboarding.web.dto.UserPostDto;
+import com.wanted.preonboarding.web.dto.JoinDto;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void signUp(UserPostDto userPostDto){
-        verifyDuplicationEmail(userPostDto.email());
+    public void signUp(JoinDto joinDto){
+        verifyDuplicationEmail(joinDto.email());
 
-        User user = userPostDto.toEntity();
-        String encodedPwd = passwordEncoder.encode(userPostDto.password());
+        User user = joinDto.toEntity();
+        String encodedPwd = passwordEncoder.encode(joinDto.password());
 
         user.applyEncryptPassword(encodedPwd);
         userRepository.save(user);

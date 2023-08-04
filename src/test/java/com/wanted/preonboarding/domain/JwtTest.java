@@ -1,9 +1,8 @@
-package com.wanted.preonboarding.jwt;
+package com.wanted.preonboarding.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.wanted.preonboarding.global.security.jwt.JwtTokenProvider;
 import com.wanted.preonboarding.global.security.jwt.SecretKey;
@@ -33,9 +32,7 @@ class JwtTest {
     @BeforeEach
     void beforeEach() {
         baseKey = "12312312312313123sdfsgsddfdfdfdfdffsdf";
-        encodedKey = Encoders.BASE64.encode(baseKey.getBytes(StandardCharsets.UTF_8));
-        byte[] decode = Decoders.BASE64.decode(encodedKey);
-        key = Keys.hmacShaKeyFor(decode);
+        key = getKey();
         jwtTokenProvider = new JwtTokenProvider(new SecretKey());
     }
 
@@ -85,5 +82,11 @@ class JwtTest {
         Date expiration = calendar.getTime();
 
         return jwtTokenProvider.createAccessToken(claims, subject, expiration, key);
+    }
+
+    private Key getKey() {
+        encodedKey = Encoders.BASE64.encode(baseKey.getBytes(StandardCharsets.UTF_8));
+        byte[] decode = Decoders.BASE64.decode(encodedKey);
+        return Keys.hmacShaKeyFor(decode);
     }
 }

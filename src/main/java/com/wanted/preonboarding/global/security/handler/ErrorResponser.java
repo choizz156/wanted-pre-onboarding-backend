@@ -5,12 +5,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 
 @Slf4j
+@Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorResponser {
 
