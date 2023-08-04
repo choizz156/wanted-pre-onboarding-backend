@@ -1,7 +1,10 @@
-package com.wanted.preonboarding.domain.user.dto;
+package com.wanted.preonboarding.web.dto;
 
+import com.wanted.preonboarding.domain.user.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import java.util.Objects;
+import lombok.EqualsAndHashCode;
 
 public record UserPostDto(
     @Email
@@ -13,4 +16,7 @@ public record UserPostDto(
     )
     String password
 ) {
+    public User toEntity() {
+        return User.builder().email(email()).password(password()).build();
+    }
 }
