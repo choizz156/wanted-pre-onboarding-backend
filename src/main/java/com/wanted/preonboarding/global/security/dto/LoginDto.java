@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 
 public record LoginDto(
-    @Email
+    @Email(message = "이메일 형식이어야 합니다.")
     String username,
     @Pattern(
         regexp = "^{8,}$",

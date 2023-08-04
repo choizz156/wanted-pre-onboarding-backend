@@ -3,11 +3,9 @@ package com.wanted.preonboarding.web.dto;
 import com.wanted.preonboarding.domain.user.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
-import java.util.Objects;
-import lombok.EqualsAndHashCode;
 
 public record UserPostDto(
-    @Email
+    @Email(message = "이메일 형식이어야 합니다.")
     String email,
 
     @Pattern(
@@ -16,6 +14,7 @@ public record UserPostDto(
     )
     String password
 ) {
+
     public User toEntity() {
         return User.builder().email(email()).password(password()).build();
     }
