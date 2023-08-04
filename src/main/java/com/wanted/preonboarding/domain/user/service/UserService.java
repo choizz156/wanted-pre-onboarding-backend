@@ -3,8 +3,11 @@ package com.wanted.preonboarding.domain.user.service;
 
 import com.wanted.preonboarding.domain.user.entity.User;
 import com.wanted.preonboarding.domain.user.repository.UserRepository;
+import com.wanted.preonboarding.global.exception.BusinessLoginException;
+import com.wanted.preonboarding.global.exception.ExceptionCode;
 import com.wanted.preonboarding.web.dto.UserPostDto;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,12 +23,20 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public void signUp(UserPostDto userPostDto){
+        verifyDuplicationEmail(userPostDto.email());
+
         User user = userPostDto.toEntity();
         String encodedPwd = passwordEncoder.encode(userPostDto.password());
 
         user.applyEncryptPassword(encodedPwd);
-
         userRepository.save(user);
         log.info("join complete");
+    }
+
+    private void verifyDuplicationEmail(final String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()){
+            throw new BusinessLoginException(ExceptionCode.EXIST_EMAIL);
+        }
     }
 }
