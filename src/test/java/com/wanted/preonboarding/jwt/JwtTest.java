@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.wanted.preonboarding.security.jwt.JwtTokenProvider;
-import com.wanted.preonboarding.security.jwt.SecretKey;
+import com.wanted.preonboarding.global.security.jwt.JwtTokenProvider;
+import com.wanted.preonboarding.global.security.jwt.SecretKey;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
