@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
 import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,11 +29,14 @@ class PostServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private QueryPostService queryPostService;
+
     private User user;
 
     @BeforeEach
     void setUp() {
-        postRepository.deleteAll();
+        postRepository.deleteAllInBatch();
         userRepository.deleteAll();
 
         JoinDto joinDto = new JoinDto("test@gmail.com", "12345678");
@@ -150,7 +154,7 @@ class PostServiceTest {
         Post post = postRepository.save(new Post("title", "content"));
 
         //when
-        Post result = postService.getPost(post.getId());
+        Post result = queryPostService.getPost(post.getId());
 
         //then
         assertThat(result.getTitle()).isEqualTo("title");
@@ -164,7 +168,7 @@ class PostServiceTest {
         postRepository.save(new Post("title", "content"));
 
         //expected
-        assertThatThrownBy(() -> postService.getPost(11L))
+        assertThatThrownBy(() -> queryPostService.getPost(11L))
             .isInstanceOf(BusinessLoginException.class)
             .hasMessageContaining(ExceptionCode.NOT_FOUND_POST.getMsg());
     }
@@ -181,5 +185,56 @@ class PostServiceTest {
         //then
         List<Post> all = postRepository.findAll();
         assertThat(all).isEmpty();
+    }
+
+    @DisplayName("posting 목록을 조회할 경우, 1페이지 당 10개씩 페이지네이션이 된다.(기본값)")
+    @Test
+    void pagination() throws Exception {
+        //given
+        List<Post> posts = IntStream.range(0, 30)
+            .mapToObj(i -> Post.builder()
+                .title("title " + i)
+                .content("content " + i)
+                .user(user)
+                .build()
+        ).toList();
+
+        postRepository.saveAll(posts);
+
+        //when
+        List<PostResponse> results = queryPostService.getLists(0, null);
+
+        //then
+        assertThat(results).hasSize(10);
+        assertThat(results.get(0).getTitle()).isEqualTo("title 29");
+        assertThat(results.get(9).getTitle()).isEqualTo("title 20");
+    }
+
+    @DisplayName("사용자가 posting 목록의 갯수를 정할 시 사용자가 정한 갯수대로 페이지네이션된다.")
+    @Test
+    void pagination2() throws Exception {
+        //given
+        List<Post> posts = IntStream.range(0, 30)
+            .mapToObj(i -> Post.builder()
+                .title("title " + i)
+                .content("content " + i)
+                .user(user)
+                .build()
+        ).toList();
+
+        postRepository.saveAll(posts);
+
+        //when
+        List<PostResponse> results1 = queryPostService.getLists(1, 20);
+        List<PostResponse> results2 = queryPostService.getLists(2, 20);
+
+        //then
+        assertThat(results1).hasSize(20);
+        assertThat(results1.get(0).getTitle()).isEqualTo("title 29");
+        assertThat(results1.get(19).getTitle()).isEqualTo("title 10");
+
+        assertThat(results2).hasSize(10);
+        assertThat(results2.get(0).getTitle()).isEqualTo("title 9");
+        assertThat(results2.get(9).getTitle()).isEqualTo("title 0");
     }
 }

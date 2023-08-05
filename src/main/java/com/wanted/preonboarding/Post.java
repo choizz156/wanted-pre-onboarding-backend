@@ -1,7 +1,6 @@
 package com.wanted.preonboarding;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor
 public class Post extends BaseEntity {
 
     @Id
@@ -28,6 +27,12 @@ public class Post extends BaseEntity {
     private User user;
 
     @Builder
+    public Post(final String title, final String content, final User user) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+    }
+
     public Post(final String title, final String content) {
         this.title = title;
         this.content = content;
