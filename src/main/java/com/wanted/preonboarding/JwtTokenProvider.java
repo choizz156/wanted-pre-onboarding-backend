@@ -63,10 +63,10 @@ public class JwtTokenProvider {
     public String delegateAccessToken(User user) {
         Map<String, Object> claims = new ConcurrentHashMap<>();
 
-        claims.put("username", user.getEmail());
+        claims.put("userId", user.getId());
         claims.put("roles", user.getRoles().name());
 
-        String subject = user.getEmail();
+        String subject = String.valueOf(user.getId());
         Date expiration = getExpiration(accessTokenExpirationMinutes);
         Key key = secretKey.getSecretKey();
 

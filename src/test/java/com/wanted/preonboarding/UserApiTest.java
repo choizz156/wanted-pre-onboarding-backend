@@ -53,6 +53,31 @@ class UserApiTest extends ApiTest {
         //@formatter:on
     }
 
+    @DisplayName("회원 가입 시 이메일이 중복되는 경우 예외를 던진다.")
+    @Test
+    void duplication_email() throws Exception {
+        //given
+        JoinDto dto = new JoinDto("test@gmail.com", "testdfdf11");
+        userService.signUp(dto);
+
+        //when
+        JoinDto dto2 = new JoinDto("test@gmail.com", "testdfd231");
+
+        //expected
+        //@formatter:off
+        given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(dto2)
+        .when()
+                .post("/users")
+        .then()
+                .log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("data.status", equalTo(HttpStatus.BAD_REQUEST.value()))
+                .body("data.msg", equalTo(ExceptionCode.EXIST_EMAIL.getMsg()));
+        //@formatter:on
+    }
+
     @DisplayName("로그인을 하면 토큰이 발급된다")
     @Test
     void login() throws Exception {
@@ -102,8 +127,8 @@ class UserApiTest extends ApiTest {
         .then()
                 .log().all()
                 .statusCode(HttpStatus.UNAUTHORIZED.value())
-                .body("status", equalTo(401))
-                .body("msg", is(in(new String[]{"자격 증명에 실패하였습니다.","Bad credentials"})));
+                .body("data.status", equalTo(401))
+                .body("data.msg", is(in(new String[]{"자격 증명에 실패하였습니다.","Bad credentials"})));
         //@formatter:on
     }
 
@@ -122,11 +147,11 @@ class UserApiTest extends ApiTest {
         .then()
                 .log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .body("status", equalTo(400))
+                .body("data.status", equalTo(400))
                 .body("time", notNullValue())
-                .body("customFieldErrors[0].field", equalTo("email"))
-                .body("customFieldErrors[0].rejectedValue", equalTo("testgmail.com"))
-                .body("customFieldErrors[0].reason", equalTo("이메일 형식이어야 합니다."));
+                .body("data.customFieldErrors[0].field", equalTo("email"))
+                .body("data.customFieldErrors[0].rejectedValue", equalTo("testgmail.com"))
+                .body("data.customFieldErrors[0].reason", equalTo("@가 포함되어야 합니다."));
         //@formatter:on
     }
 
@@ -145,11 +170,11 @@ class UserApiTest extends ApiTest {
         .then()
                 .log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .body("status", equalTo(400))
+                .body("data.status", equalTo(400))
                 .body("time", notNullValue())
-                .body("customFieldErrors[0].field", equalTo("password"))
-                .body("customFieldErrors[0].rejectedValue", equalTo("sdf"))
-                .body("customFieldErrors[0].reason", equalTo("비밀번호는 8자리 이상이어야 합니다."));
+                .body("data.customFieldErrors[0].field", equalTo("password"))
+                .body("data.customFieldErrors[0].rejectedValue", equalTo("sdf"))
+                .body("data.customFieldErrors[0].reason", equalTo("비밀번호는 8자리 이상이어야 합니다."));
         //@formatter:on
     }
 }

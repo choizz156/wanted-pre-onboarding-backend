@@ -2,8 +2,14 @@ package com.wanted.preonboarding;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 
+import com.navercorp.fixturemonkey.FixtureMonkey;
+import com.navercorp.fixturemonkey.api.introspector.ConstructorPropertiesArbitraryIntrospector;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,13 +28,22 @@ class PostApiTest extends ApiTest {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private UserService userService;
+
     private User user;
+    private String token;
+
+    private final FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
+        .objectIntrospector(ConstructorPropertiesArbitraryIntrospector.INSTANCE)
+        .defaultNotNull(true)
+        .build();
 
     @BeforeEach
     void setUpEach() {
         postRepository.deleteAll();
         userRepository.deleteAll();
-        user = userRepository.save(new User("test@gmail.com", "12345678"));
+        token = login();
     }
 
     @DisplayName("posting 생성")
@@ -40,6 +55,7 @@ class PostApiTest extends ApiTest {
         //@formatter:off
         given()
                 .log().all()
+                .header("Authorization", token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("userId", user.getId())
                 .body(postCreateDto)
@@ -69,6 +85,7 @@ class PostApiTest extends ApiTest {
         given()
                 .log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", token)
                 .pathParam("postId", post.getId())
                 .queryParam("userId", user.getId())
                 .body(postEditDto)
@@ -96,6 +113,7 @@ class PostApiTest extends ApiTest {
         given()
                 .log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", token)
                 .pathParam("postId", post.getId())
                 .queryParam("userId", 11L)
                 .body(postEditDto)
@@ -103,9 +121,10 @@ class PostApiTest extends ApiTest {
                 .patch("/posts/{postId}")
         .then()
                 .log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
                 .body("time", notNullValue())
-                .body("status", equalTo(400))
-                .body("msg", equalTo(ExceptionCode.NOT_MATCHING_OWNER.getMsg()));
+                .body("data.status", equalTo(400))
+                .body("data.msg", equalTo(ExceptionCode.NOT_MATCHING_OWNER.getMsg()));
         //@formatter:on
     }
 
@@ -140,12 +159,90 @@ class PostApiTest extends ApiTest {
         //@formatter:off
         given()
                 .log().all()
+                .header("Authorization", token)
         .when()
-                .delete("posts/{postId}", post.getId())
+                .delete("/posts/{postId}", post.getId())
         .then()
                 .log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("data", equalTo("delete complete"));
         //@formatter:on
+    }
+
+    @DisplayName("posting 목록을 조회할 경우, 1 페이지 당 10개씩 페이지네이션이 된다.(기본값)")
+    @Test
+    void pagination() throws Exception {
+        IntStream.range(0, 30).forEach(
+            i -> {
+                PostCreateDto postCreateDto = fixtureMonkey.giveMeBuilder(PostCreateDto.class)
+                    .set("title", "title" + i)
+                    .set("content", "content" + i)
+                    .sample();
+                postService.posting(user.getId(), postCreateDto);
+            }
+        );
+
+        //@formatter:off
+        given()
+                .log().all()
+                .queryParam("page", 0)
+        .when()
+                .get("/posts")
+        .then()
+                .log().all()
+                .body("data", hasSize(10))
+                .body("data[0].title",equalTo("title29"))
+                .body("data[9].title",equalTo("title20"))
+                .statusCode(HttpStatus.OK.value());
+        //@formatter:on
+    }
+
+    @DisplayName("사용자가 posting 목록의 갯수를 정할 시 사용자가 정한 갯수대로 페이지네이션된다.")
+    @Test
+    void pagination2() throws Exception {
+        IntStream.range(0, 30).forEach(
+            i -> {
+                PostCreateDto postCreateDto = fixtureMonkey.giveMeBuilder(PostCreateDto.class)
+                    .set("title", "title" + i)
+                    .set("content", "content" + i)
+                    .sample();
+                postService.posting(user.getId(), postCreateDto);
+            }
+        );
+
+        //@formatter:off
+        given()
+                .log().all()
+                .queryParam("page", 0)
+                .queryParam("size",20)
+        .when()
+                .get("/posts")
+        .then()
+                .log().all()
+                .body("data", hasSize(20))
+                .body("data[0].title",equalTo("title29"))
+                .body("data[19].title",equalTo("title10"))
+                .statusCode(HttpStatus.OK.value());
+        //@formatter:on
+
+    }
+
+
+    private String login(){
+        //given
+        user = userService.signUp(new JoinDto("test@gmail.com", "1234456778"));
+        LoginDto loginDto = new LoginDto("test@gmail.com", "1234456778");
+
+        //@formatter:off
+        ExtractableResponse<Response> response = given()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(loginDto)
+            .when()
+            .post("/users/login")
+            .then()
+            .extract();
+        //@formatter:on
+
+        return response.header("Authorization");
     }
 }

@@ -38,7 +38,7 @@ public class ErrorResponser {
             .status(statusCode.value())
             .build();
 
-        String errorResponse = Mapper.getInstance().writeValueAsString(errorInfo);
+        String errorResponse = Mapper.getInstance().writeValueAsString(new ResponseDto<>(errorInfo));
 
         response.getWriter().write(errorResponse);
     }

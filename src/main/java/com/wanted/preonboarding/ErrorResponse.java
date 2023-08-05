@@ -2,7 +2,6 @@ package com.wanted.preonboarding;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +13,6 @@ import org.springframework.validation.FieldError;
 @JsonInclude(Include.NON_EMPTY)
 public class ErrorResponse {
 
-    private final LocalDateTime time = LocalDateTime.now();
     private final int status;
     private final String msg;
     private final List<CustomFieldError> customFieldErrors;
