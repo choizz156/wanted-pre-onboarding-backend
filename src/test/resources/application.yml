@@ -8,5 +8,5 @@ spring:
         format_sql: true
 
 jwt:
-  secret-key: dmmvooi9u4op3pvivfpo2ngbp34o4o
+  secret-key: dmmvooi9u4op3pvivfpo2ngbp34o4odfgsldkfnelskdfgsdf
   access-token-expiration-minutes: 30
