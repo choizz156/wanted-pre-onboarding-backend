@@ -86,9 +86,9 @@ class PostServiceTest {
         PostCreateDto dto = new PostCreateDto("title", "content");
 
         //expected
-        assertThatThrownBy(() ->   postService.posting(14L, dto))
-        	.isInstanceOf(BusinessLoginException.class)
-        	.hasMessageContaining(ExceptionCode.NOT_FOUND_USER.getMsg());
+        assertThatThrownBy(() -> postService.posting(14L, dto))
+            .isInstanceOf(BusinessLoginException.class)
+            .hasMessageContaining(ExceptionCode.NOT_FOUND_USER.getMsg());
     }
 
     @DisplayName("posting 내용은 작성자만이 수정할 수 있다.")
@@ -142,6 +142,32 @@ class PostServiceTest {
             .isInstanceOf(BusinessLoginException.class)
             .hasMessageContaining(ExceptionCode.NOT_FOUND_POST.getMsg());
 
+    }
+
+    @DisplayName("특정 posting을 조회할 수 있다.")
+    @Test
+    void search() throws Exception {
+        //given
+        Post post = postRepository.save(new Post("title", "content"));
+
+        //when
+        Post result = postService.getPost(post.getId());
+
+        //then
+        assertThat(result.getTitle()).isEqualTo("title");
+        assertThat(result.getContent()).isEqualTo("content");
+    }
+
+    @DisplayName("특정 posting을 조회 시 존재하지 않는 경우 예외를 던진다.")
+    @Test
+    void search_exception() throws Exception {
+        //given
+        postRepository.save(new Post("title", "content"));
+
+        //then
+        assertThatThrownBy(() -> postService.getPost(11L))
+            .isInstanceOf(BusinessLoginException.class)
+            .hasMessageContaining(ExceptionCode.NOT_FOUND_POST.getMsg());
     }
 
 }

@@ -123,7 +123,7 @@ class UserApiTest extends ApiTest {
                 .log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .body("status", equalTo(400))
-                .body("createdAt", notNullValue())
+                .body("time", notNullValue())
                 .body("customFieldErrors[0].field", equalTo("email"))
                 .body("customFieldErrors[0].rejectedValue", equalTo("testgmail.com"))
                 .body("customFieldErrors[0].reason", equalTo("이메일 형식이어야 합니다."));
@@ -146,7 +146,7 @@ class UserApiTest extends ApiTest {
                 .log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .body("status", equalTo(400))
-                .body("createdAt", notNullValue())
+                .body("time", notNullValue())
                 .body("customFieldErrors[0].field", equalTo("password"))
                 .body("customFieldErrors[0].rejectedValue", equalTo("sdf"))
                 .body("customFieldErrors[0].reason", equalTo("비밀번호는 8자리 이상이어야 합니다."));
