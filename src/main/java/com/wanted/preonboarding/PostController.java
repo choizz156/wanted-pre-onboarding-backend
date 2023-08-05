@@ -1,11 +1,5 @@
 package com.wanted.preonboarding;
 
-import com.wanted.preonboarding.Post;
-import com.wanted.preonboarding.PostService;
-import com.wanted.preonboarding.PostEditDto;
-import com.wanted.preonboarding.PostCreateDto;
-import com.wanted.preonboarding.PostResponse;
-import com.wanted.preonboarding.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PatchMapping;

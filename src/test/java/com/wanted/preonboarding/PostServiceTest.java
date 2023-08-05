@@ -1,16 +1,10 @@
 package com.wanted.preonboarding;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
-import com.wanted.preonboarding.JoinDto;
-import com.wanted.preonboarding.PostCreateDto;
-import com.wanted.preonboarding.Post;
-import com.wanted.preonboarding.PostRepository;
-import com.wanted.preonboarding.PostService;
-import com.wanted.preonboarding.User;
-import com.wanted.preonboarding.UserRepository;
-import com.wanted.preonboarding.UserService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +34,8 @@ class PostServiceTest {
     void setUp() {
         postRepository.deleteAll();
         userRepository.deleteAll();
-        JoinDto joinDto = new JoinDto("test@gmail.com", "123456");
+
+        JoinDto joinDto = new JoinDto("test@gmail.com", "12345678");
         user = userService.signUp(joinDto);
     }
 
@@ -81,6 +76,72 @@ class PostServiceTest {
             .containsAnyOf(
                 tuple(post.getId(), "title", "content")
             );
+    }
+
+    @DisplayName("게시글 저장 시 유저를 찾지 못하면 예외를 던진다.")
+    @Test
+    void post_exception() throws Exception {
+
+        //given
+        PostCreateDto dto = new PostCreateDto("title", "content");
+
+        //expected
+        assertThatThrownBy(() ->   postService.posting(14L, dto))
+        	.isInstanceOf(BusinessLoginException.class)
+        	.hasMessageContaining(ExceptionCode.NOT_FOUND_USER.getMsg());
+    }
+
+    @DisplayName("posting 내용은 작성자만이 수정할 수 있다.")
+    @Test
+    void edit() throws Exception {
+        //given
+        PostCreateDto dto = new PostCreateDto("title", "content");
+        Post posting = postService.posting(user.getId(), dto);
+
+        PostEditDto postEditDto = new PostEditDto("title1", "content1");
+
+        //when
+        Post edit = postService.edit(user.getId(), posting.getId(), postEditDto);
+
+        //then
+        assertThat(edit.getId()).isEqualTo(posting.getId());
+        assertThat(edit.getContent()).isEqualTo("content1");
+        assertThat(edit.getTitle()).isEqualTo("title1");
+    }
+
+    @DisplayName("작성자가 아닌 유저가 포스팅을 수정할 경우 예외가 발생한다.")
+    @Test
+    void edit_exception() throws Exception {
+        //given
+        PostCreateDto dto = new PostCreateDto("title", "content");
+        Post posting = postService.posting(user.getId(), dto);
+        PostEditDto postEditDto = new PostEditDto("title1", "content1");
+        Long postingId = posting.getId();
+
+        //when
+        assertThatCode(() ->
+            postService.edit(11L, postingId, postEditDto)
+        )
+            .isInstanceOf(BusinessLoginException.class)
+            .hasMessageContaining(ExceptionCode.NOT_MATCHING_OWNER.getMsg());
+    }
+
+    @DisplayName("posting 수정 시 posting이 존재하지 않으면 예외를 던진다.")
+    @Test
+    void edit_exception2() throws Exception {
+        //given
+        PostCreateDto dto = new PostCreateDto("title", "content");
+        Post posting = postService.posting(user.getId(), dto);
+        PostEditDto postEditDto = new PostEditDto("title1", "content1");
+        Long postingId = posting.getId();
+        Long userId = user.getId();
+
+        assertThatCode(() ->
+            postService.edit(userId, 22L, postEditDto)
+        )
+            .isInstanceOf(BusinessLoginException.class)
+            .hasMessageContaining(ExceptionCode.NOT_FOUND_POST.getMsg());
+
     }
 
 }

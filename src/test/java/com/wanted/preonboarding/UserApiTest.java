@@ -3,10 +3,13 @@ package com.wanted.preonboarding;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.in;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 import java.util.stream.Stream;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+@DisplayName("user api 테스트, 로그인 포함")
 class UserApiTest extends ApiTest {
 
     @Autowired
@@ -24,12 +28,12 @@ class UserApiTest extends ApiTest {
     @Autowired
     private UserRepository userRepository;
 
-    @AfterEach
+    @BeforeEach
     void tearDown() {
         userRepository.deleteAll();
     }
 
-    @DisplayName("회원 가입 api 테스트")
+    @DisplayName("회원 가입")
     @Test
     void joinApi() throws Exception {
         //given
@@ -45,7 +49,7 @@ class UserApiTest extends ApiTest {
         .then()
                 .log().all()
                 .statusCode(HttpStatus.CREATED.value())
-                .body("data", equalTo("회원 가입 완료"));
+                .body("data", equalTo(joinDto.email()));
         //@formatter:on
     }
 
@@ -70,7 +74,7 @@ class UserApiTest extends ApiTest {
         //@formatter:on
     }
 
-    private static Stream<Arguments> provideWrongInfo(){
+    private static Stream<Arguments> provideWrongInfo() {
         LoginDto wrongEmail = new LoginDto("test123@gmail.com", "12345678");
         LoginDto wrongPwd = new LoginDto("test@gmail.com", "123456782");
 
@@ -99,7 +103,53 @@ class UserApiTest extends ApiTest {
                 .log().all()
                 .statusCode(HttpStatus.UNAUTHORIZED.value())
                 .body("status", equalTo(401))
-                .body("msg", equalTo("자격 증명에 실패하였습니다."));
+                .body("msg", is(in(new String[]{"자격 증명에 실패하였습니다.","Bad credentials"})));
+        //@formatter:on
+    }
+
+    @DisplayName("이메일에 @가 포함되어 있지 않으면 예외를 던진다.")
+    @Test
+    void email() throws Exception {
+        //given
+        JoinDto dto = new JoinDto("testgmail.com", "sdfsgsdfe");
+
+        //@formatter:off
+        given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(dto)
+        .when()
+                .post("/users")
+        .then()
+                .log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("status", equalTo(400))
+                .body("createdAt", notNullValue())
+                .body("customFieldErrors[0].field", equalTo("email"))
+                .body("customFieldErrors[0].rejectedValue", equalTo("testgmail.com"))
+                .body("customFieldErrors[0].reason", equalTo("이메일 형식이어야 합니다."));
+        //@formatter:on
+    }
+
+    @DisplayName("비밀번호가 8자리 이하라면 예외를 던진다.")
+    @Test
+    void password() throws Exception {
+        //given
+        JoinDto dto = new JoinDto("test@gmail.com", "sdf");
+
+        //@formatter:off
+        given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(dto)
+        .when()
+                .post("/users")
+        .then()
+                .log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("status", equalTo(400))
+                .body("createdAt", notNullValue())
+                .body("customFieldErrors[0].field", equalTo("password"))
+                .body("customFieldErrors[0].rejectedValue", equalTo("sdf"))
+                .body("customFieldErrors[0].reason", equalTo("비밀번호는 8자리 이상이어야 합니다."));
         //@formatter:on
     }
 }

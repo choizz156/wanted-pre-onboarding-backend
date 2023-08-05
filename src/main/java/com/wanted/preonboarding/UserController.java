@@ -1,8 +1,5 @@
 package com.wanted.preonboarding;
 
-import com.wanted.preonboarding.UserService;
-import com.wanted.preonboarding.ResponseDto;
-import com.wanted.preonboarding.JoinDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,12 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private static final String JOIN_COMPLETE = "회원 가입 완료";
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseDto<String> post(@Valid @RequestBody JoinDto joinDto) {
-        userService.signUp(joinDto);
-        return new ResponseDto<>(JOIN_COMPLETE);
+        User user = userService.signUp(joinDto);
+        return new ResponseDto<>(user.getEmail());
     }
 }

@@ -1,13 +1,11 @@
 package com.wanted.preonboarding;
 
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 public class PostResponse {
 
-    private LocalDateTime createdAt = LocalDateTime.now();
     private String title;
     private String content;
 
