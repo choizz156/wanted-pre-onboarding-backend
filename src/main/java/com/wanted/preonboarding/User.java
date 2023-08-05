@@ -51,5 +51,8 @@ public class User extends BaseEntity {
 
     public void addPost(final Post post) {
         posts.add(post);
+        if(post.getUser() != this){
+            post.addUser(this);
+        }
     }
 }

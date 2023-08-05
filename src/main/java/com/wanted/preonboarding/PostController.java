@@ -2,6 +2,7 @@ package com.wanted.preonboarding;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,5 +37,13 @@ public class PostController {
     ) {
         Post edit = postService.edit(userId, postId, postEditDto);
         return new ResponseDto<>(PostResponse.of(edit));
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseDto<PostResponse> search(
+        @PathVariable Long postId
+    ) {
+        Post post = postService.getPost(postId);
+        return new ResponseDto<>(PostResponse.of(post));
     }
 }

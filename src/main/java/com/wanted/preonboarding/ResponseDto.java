@@ -1,13 +1,13 @@
 package com.wanted.preonboarding;
 
 import java.time.LocalDateTime;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class ResponseDto<T> {
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private T data;
+    private final LocalDateTime time = LocalDateTime.now();
+    private final T data;
 
     public ResponseDto(final T data) {
         this.data = data;

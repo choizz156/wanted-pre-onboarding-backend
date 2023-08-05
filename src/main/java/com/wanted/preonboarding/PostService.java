@@ -68,4 +68,11 @@ public class PostService {
     private boolean isNotOwner(final Long userId, final Post post) {
         return !post.getUser().getId().equals(userId);
     }
+
+    public Post getPost(final Long id) {
+        Optional<Post> optionalPost = postRepository.findById(id);
+        return optionalPost.orElseThrow(
+            () -> new BusinessLoginException(ExceptionCode.NOT_FOUND_POST)
+        );
+    }
 }

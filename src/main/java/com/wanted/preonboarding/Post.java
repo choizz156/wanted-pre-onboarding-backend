@@ -35,7 +35,10 @@ public class Post extends BaseEntity {
 
     public void addUser(final User user) {
         this.user = user;
-        this.user.addPost(this);
+
+        if(!user.getPosts().contains(this)){
+           this.user.addPost(this);
+        }
     }
 
     public void editTitle(final String title) {

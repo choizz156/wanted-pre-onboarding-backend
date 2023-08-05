@@ -14,7 +14,7 @@ import org.springframework.validation.FieldError;
 @JsonInclude(Include.NON_EMPTY)
 public class ErrorResponse {
 
-    private final LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime time = LocalDateTime.now();
     private final int status;
     private final String msg;
     private final List<CustomFieldError> customFieldErrors;
