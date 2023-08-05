@@ -75,4 +75,8 @@ public class PostService {
             () -> new BusinessLoginException(ExceptionCode.NOT_FOUND_POST)
         );
     }
+
+    public void delete(final Long postId) {
+        postRepository.deleteById(postId);
+    }
 }
