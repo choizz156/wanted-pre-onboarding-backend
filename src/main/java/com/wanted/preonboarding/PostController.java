@@ -1,6 +1,8 @@
 package com.wanted.preonboarding;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 @RestController
 public class PostController {
 
     private final PostService postService;
+    private final QueryPostService queryPostService;
 
     private static final String DELETE_COMPLETE = "delete complete";
 
@@ -44,8 +48,18 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public ResponseDto<PostResponse> search(@PathVariable Long postId) {
-        Post post = postService.getPost(postId);
+        Post post = queryPostService.getPost(postId);
         return new ResponseDto<>(PostResponse.of(post));
+    }
+
+    @GetMapping
+    public ResponseDto<List<PostResponse>> paging(
+        @RequestParam Integer page,
+        @RequestParam(required = false) Integer size
+    ) {
+        log.error("{}, {}", page, size);
+        List<PostResponse> lists = queryPostService.getLists(page, size);
+        return new ResponseDto<>(lists);
     }
 
     @DeleteMapping("/{postId}")
@@ -53,4 +67,5 @@ public class PostController {
         postService.delete(postId);
         return new ResponseDto<>(DELETE_COMPLETE);
     }
+
 }

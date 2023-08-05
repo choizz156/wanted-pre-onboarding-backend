@@ -23,6 +23,7 @@ public class PostService {
 
         postRepository.save(post);
 
+        log.info("post complete");
         return post;
     }
 
@@ -40,20 +41,12 @@ public class PostService {
     }
 
     public void delete(final Long postId) {
-        postRepository.findById(postId)
-            .ifPresent(postRepository::delete);
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new BusinessLoginException(ExceptionCode.NOT_FOUND_POST));
 
-        throw new BusinessLoginException(ExceptionCode.NOT_FOUND_POST);
+        postRepository.delete(post);
     }
 
-    @Transactional(readOnly = true)
-    public Post getPost(final Long id) {
-        Optional<Post> optionalPost = postRepository.findById(id);
-
-        return optionalPost.orElseThrow(
-            () -> new BusinessLoginException(ExceptionCode.NOT_FOUND_POST)
-        );
-    }
 
     private void editPost(final PostEditDto postEditDto, final Post post) {
 
@@ -83,4 +76,5 @@ public class PostService {
     private boolean isNotOwner(final Long userId, final Post post) {
         return !post.getUser().getId().equals(userId);
     }
+
 }
