@@ -170,4 +170,16 @@ class PostServiceTest {
             .hasMessageContaining(ExceptionCode.NOT_FOUND_POST.getMsg());
     }
 
+    @DisplayName("특정 posting을 삭제할 수 있다.")
+    @Test
+    void delete() throws Exception {
+        //given
+        Post post = postRepository.save(new Post("title", "content"));
+        //when
+        postService.delete(post.getId());
+
+        //then
+        List<Post> all = postRepository.findAll();
+        assertThat(all).isEmpty();
+    }
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 class PostApiTest extends ApiTest {
@@ -128,6 +129,24 @@ class PostApiTest extends ApiTest {
                 .body("data.userId", equalTo(user.getId().intValue()))
                 .body("data.createdAt", notNullValue())
                 .body("data.modifiedAt", notNullValue());
+        //@formatter:on
+    }
+
+    @DisplayName("특정 posting을 삭제할 수 있다.")
+    @Test
+    void delete() throws Exception {
+        //given
+        Post post = postService.posting(user.getId(), new PostCreateDto("title", "content"));
+
+        //@formatter:off
+        given()
+                .log().all()
+        .when()
+                .delete("posts/{postId}", post.getId())
+        .then()
+                .log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("data", equalTo("delete complete"));
         //@formatter:on
     }
 }
