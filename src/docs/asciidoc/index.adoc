@@ -1,0 +1,52 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::[]
+= pre-onboarding REST API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+== Header
+|===
+| name | 설명
+
+| `Authorization`
+| API를 사용하기 위한 인증 토큰
+|===
+
+== 공통 Response
+|===
+| field | 설명
+
+| `time`
+| 이벤트 발생 시간
+
+| `data`
+| 반환될 데이터
+|===
+
+== 공통 ErrorResponse
+|===
+| field | 설명
+
+| `time`
+| 이벤트 발생 시간
+
+| `status`
+| 상태 코드
+
+| `msg`
+| 에러 메시지
+|===
+
+[[User-API]]
+== User API
+include::user.adoc[]
+
+[[Post-API]]
+== Post API
+include::post.adoc[]

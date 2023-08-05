@@ -1,0 +1,82 @@
+[[user-create]]
+=== `회원가입`
+==== HTTP Request
+include::{snippets}/user/http-request.adoc[]
+include::{snippets}/user/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/user/http-response.adoc[]
+include::{snippets}/user/response-fields.adoc[]
+
+---
+
+==== `회원가입 예외`
+[[Exception1]]
+==== `(1) 유효성 검사`
+|===
+| path | description
+
+| email
+| `이메일은 @가 포함되어야 합니다. ex)test@gmail.com`
+
+| password
+| `패스워드는 8자리 이상이어야 합니다.`
+
+|===
+
+==== 검증 실패 응답 예시
+
+    HTTP/1.1 400 Bad Request
+
+   {
+    "time": "2023-08-06T03:48:07.811118",
+    "status": 400,
+    "customFieldErrors": [
+        {
+            "field": "email",
+            "rejectedValue": "testgmail.com",
+            "reason": "@가 포함되어야 합니다."
+        }
+    ]
+}
+
+---
+
+==== `(2) 이메일 중복`
+|===
+| field | description
+
+| email
+| `이메일은 유일해야 합니다.`
+
+
+|===
+
+==== HTTP Request
+include::{snippets}/user-error/http-request.adoc[]
+include::{snippets}/user-error/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/user-error/http-response.adoc[]
+
+---
+
+=== `로그인`
+==== HTTP Request
+include::{snippets}/user-login/http-request.adoc[]
+include::{snippets}/user-login/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/user-login/http-response.adoc[]
+include::{snippets}/user-login/response-headers.adoc[]
+
+---
+
+==== `로그인 실패 (이메일 오류, 패스워드 오류)`
+==== HTTP Request
+include::{snippets}/user-login-error/http-request.adoc[]
+include::{snippets}/user-login-error/request-fields.adoc[]
+
+==== HTTP Response
+include::{snippets}/user-login-error/http-response.adoc[]
+---
