@@ -1,0 +1,3 @@
+jwt:
+  secret-key : sdfsdfsdfesdfdf1111345dfesf6645454534545451
+  access-token-expiration-minutes: 30

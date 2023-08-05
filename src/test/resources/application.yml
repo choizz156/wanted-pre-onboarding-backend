@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+jwt:
+  secret-key: dmmvooi9u4op3pvivfpo2ngbp34o4o
+  access-token-expiration-minutes: 30

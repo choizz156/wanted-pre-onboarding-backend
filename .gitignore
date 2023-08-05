@@ -331,3 +331,6 @@ gradle-app.setting
 
 .idea
 
+application.yml
+application-auth.yml
+
