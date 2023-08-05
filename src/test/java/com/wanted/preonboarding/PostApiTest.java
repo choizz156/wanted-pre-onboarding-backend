@@ -92,7 +92,6 @@ class PostApiTest extends ApiTest {
         Post post = postService.posting(user.getId(), new PostCreateDto("title", "content"));
         PostEditDto postEditDto = new PostEditDto("title1", "content1");
 
-        //expected
         //@formatter:off
         given()
                 .log().all()

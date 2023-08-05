@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
-import com.wanted.preonboarding.JwtTokenProvider;
-import com.wanted.preonboarding.SecretKey;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -39,10 +37,10 @@ class JwtTest {
     @DisplayName("액세스 토큰 발급이 발급된다.")
     @Test
     void acccesToken() throws Exception {
-        //given
+        //given when
         String accessToken = getAccessToken(Calendar.MINUTE, 10, key);
 
-        //when then
+        //then
         assertThat(accessToken).isNotNull();
     }
 
@@ -52,7 +50,7 @@ class JwtTest {
         //given
         String accessToken = getAccessToken(Calendar.MINUTE, 10, key);
 
-        //when then
+        //expected
         assertThatNoException().isThrownBy(() -> jwtTokenProvider.getJws(accessToken, key));
     }
 
@@ -62,10 +60,9 @@ class JwtTest {
         //given
         String accessToken = getAccessToken(Calendar.SECOND, 1, key);
 
-        //when
         TimeUnit.SECONDS.sleep(2);
 
-        //then
+        //expected
         assertThatCode(() ->
             jwtTokenProvider.getJws(accessToken, key)
         ).isInstanceOf(ExpiredJwtException.class);

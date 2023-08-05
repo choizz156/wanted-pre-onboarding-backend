@@ -16,7 +16,6 @@ public class PostService {
     private final UserService userService;
 
     public Post posting(final Long userId, final PostCreateDto dto) {
-
         User user = userService.findUser(userId);
         Post post = dto.toEntity();
 
@@ -28,7 +27,6 @@ public class PostService {
     }
 
     public Post edit(final Long userId, final Long postId, final PostEditDto postEditDto) {
-
         Optional<Post> optionalPost = postRepository.findById(postId);
         Post postEntity = optionalPost.orElseThrow(
             () -> new BusinessLoginException(ExceptionCode.NOT_FOUND_POST)
@@ -41,7 +39,24 @@ public class PostService {
         return postEntity;
     }
 
+    public void delete(final Long postId) {
+        postRepository.findById(postId)
+            .ifPresent(postRepository::delete);
+
+        throw new BusinessLoginException(ExceptionCode.NOT_FOUND_POST);
+    }
+
+    @Transactional(readOnly = true)
+    public Post getPost(final Long id) {
+        Optional<Post> optionalPost = postRepository.findById(id);
+
+        return optionalPost.orElseThrow(
+            () -> new BusinessLoginException(ExceptionCode.NOT_FOUND_POST)
+        );
+    }
+
     private void editPost(final PostEditDto postEditDto, final Post post) {
+
         if (isDifferentTitle(postEditDto, post)) {
             post.editTitle(postEditDto.title());
         }
@@ -67,16 +82,5 @@ public class PostService {
 
     private boolean isNotOwner(final Long userId, final Post post) {
         return !post.getUser().getId().equals(userId);
-    }
-
-    public Post getPost(final Long id) {
-        Optional<Post> optionalPost = postRepository.findById(id);
-        return optionalPost.orElseThrow(
-            () -> new BusinessLoginException(ExceptionCode.NOT_FOUND_POST)
-        );
-    }
-
-    public void delete(final Long postId) {
-        postRepository.deleteById(postId);
     }
 }

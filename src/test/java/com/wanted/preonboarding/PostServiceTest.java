@@ -97,7 +97,6 @@ class PostServiceTest {
         //given
         PostCreateDto dto = new PostCreateDto("title", "content");
         Post posting = postService.posting(user.getId(), dto);
-
         PostEditDto postEditDto = new PostEditDto("title1", "content1");
 
         //when
@@ -118,7 +117,7 @@ class PostServiceTest {
         PostEditDto postEditDto = new PostEditDto("title1", "content1");
         Long postingId = posting.getId();
 
-        //when
+        //expected
         assertThatCode(() ->
             postService.edit(11L, postingId, postEditDto)
         )
@@ -131,11 +130,11 @@ class PostServiceTest {
     void edit_exception2() throws Exception {
         //given
         PostCreateDto dto = new PostCreateDto("title", "content");
-        Post posting = postService.posting(user.getId(), dto);
+        postService.posting(user.getId(), dto);
         PostEditDto postEditDto = new PostEditDto("title1", "content1");
-        Long postingId = posting.getId();
         Long userId = user.getId();
 
+        //expected
         assertThatCode(() ->
             postService.edit(userId, 22L, postEditDto)
         )
@@ -164,7 +163,7 @@ class PostServiceTest {
         //given
         postRepository.save(new Post("title", "content"));
 
-        //then
+        //expected
         assertThatThrownBy(() -> postService.getPost(11L))
             .isInstanceOf(BusinessLoginException.class)
             .hasMessageContaining(ExceptionCode.NOT_FOUND_POST.getMsg());
@@ -175,6 +174,7 @@ class PostServiceTest {
     void delete() throws Exception {
         //given
         Post post = postRepository.save(new Post("title", "content"));
+
         //when
         postService.delete(post.getId());
 
