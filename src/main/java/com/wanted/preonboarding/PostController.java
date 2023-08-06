@@ -63,8 +63,11 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseDto<String> delete(@PathVariable Long postId) {
-        postService.delete(postId);
+    public ResponseDto<String> delete(
+        @PathVariable Long postId,
+        @RequestParam Long userId
+    ) {
+        postService.delete(userId, postId);
         return new ResponseDto<>(DELETE_COMPLETE);
     }
 

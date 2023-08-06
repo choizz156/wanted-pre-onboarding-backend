@@ -40,9 +40,12 @@ public class PostService {
         return postEntity;
     }
 
-    public void delete(final Long postId) {
+    public void delete(final Long userId, final Long postId) {
+
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new BusinessLoginException(ExceptionCode.NOT_FOUND_POST));
+
+        verifyOwner(userId, post);
 
         postRepository.delete(post);
     }
@@ -74,7 +77,6 @@ public class PostService {
     }
 
     private boolean isNotOwner(final Long userId, final Post post) {
-        return !post.getUser().getId().equals(userId);
+        return post.isNotSameOwner(userId);
     }
-
 }

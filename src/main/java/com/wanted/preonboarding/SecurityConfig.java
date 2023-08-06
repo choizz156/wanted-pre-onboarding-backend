@@ -19,6 +19,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshService refreshService;
+    private final RefreshTokenRepository refreshTokenRepository;
+
     private static final String POST_URL = "/posts/**";
 
     @Bean
@@ -33,10 +36,12 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(new CorsConfig().corsFilter()))
             .exceptionHandling(exceptionHandling -> {
                     exceptionHandling.accessDeniedHandler(new UserAccessDeniedHandler());
-                    exceptionHandling.authenticationEntryPoint(new UserAuthenticationEntryPoint());
+                    exceptionHandling.authenticationEntryPoint(
+                        new UserAuthenticationEntryPoint(refreshService)
+                    );
                 }
             )
-            .apply(new CustomFilterConfig(jwtTokenProvider));
+            .apply(new CustomFilterConfig(jwtTokenProvider, refreshTokenRepository, refreshService));
 
         http.authorizeHttpRequests(auth -> {
             auth.requestMatchers(HttpMethod.POST, POST_URL).hasRole("USER");

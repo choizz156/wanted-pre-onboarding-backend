@@ -53,4 +53,16 @@ public class Post extends BaseEntity {
     public void editContent(final String content) {
         this.content = content;
     }
+
+    public boolean isNotSameOwner(final Long userId) {
+        return !this.user.isSameUser(userId);
+    }
+
+    public String getUserEmail() {
+        return this.user.getEmail();
+    }
+
+    public Long getUserId() {
+        return this.user.getId();
+    }
 }

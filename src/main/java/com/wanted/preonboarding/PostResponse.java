@@ -12,6 +12,7 @@ public class PostResponse {
 
     private String title;
     private String content;
+    private String email;
     private Long userId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -20,12 +21,14 @@ public class PostResponse {
     private PostResponse(
         final String title,
         final String content,
+        final String email,
         final Long userId,
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt
     ) {
         this.title = title;
         this.content = content;
+        this.email = email;
         this.userId = userId;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
@@ -35,7 +38,8 @@ public class PostResponse {
         return PostResponse.builder()
             .title(post.getTitle())
             .content(post.getContent())
-            .userId(post.getUser().getId())
+            .email(post.getUserEmail())
+            .userId(post.getUserId())
             .createdAt(post.getCreatedAt())
             .modifiedAt(post.getModifiedAt())
             .build();

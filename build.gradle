@@ -63,6 +63,9 @@ dependencies {
 
     //fixture monkey
     implementation 'com.navercorp.fixturemonkey:fixture-monkey:0.6.2'
+
+    //expiringMap
+    implementation 'net.jodah:expiringmap:0.5.9'
 }
 
 clean {

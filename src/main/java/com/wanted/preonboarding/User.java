@@ -55,4 +55,8 @@ public class User extends BaseEntity {
             post.addUser(this);
         }
     }
+
+    public boolean isSameUser(final Long userId) {
+        return id.equals(userId);
+    }
 }

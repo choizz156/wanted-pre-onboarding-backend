@@ -20,7 +20,9 @@ public class CorsConfig {
         corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
+
         corsConfiguration.addExposedHeader("Authorization");
+        corsConfiguration.addExposedHeader("Refresh");
 
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
