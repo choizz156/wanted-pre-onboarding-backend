@@ -1,10 +1,12 @@
 package com.wanted.preonboarding;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 
 public record JoinDto(
-    @Email(message = "@가 포함되어야 합니다.")
+    @Pattern(
+        regexp = ".*@.*",
+        message = "@가 포함되어야 합니다."
+    )
     String email,
 
     @Pattern(
