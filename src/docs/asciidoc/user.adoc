@@ -27,7 +27,7 @@ include::{snippets}/user/response-fields.adoc[]
 ==== 검증 실패 응답 예시
 
     HTTP/1.1 400 Bad Request
-
+```json
    {
     "time": "2023-08-06T03:48:07.811118",
     "status": 400,
@@ -39,7 +39,7 @@ include::{snippets}/user/response-fields.adoc[]
         }
     ]
 }
-
+```
 ---
 
 ==== `(2) 이메일 중복`

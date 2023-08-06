@@ -242,7 +242,7 @@ class RestDocsTest extends RestDocsSupport {
                       headerWithName("Authorization").description("인증 토큰")
                     ),
                     queryParameters(
-                        parameterWithName("userId").description("회원 아이디")
+                        parameterWithName("userId").description("작성자 이메일")
                     ),
                     requestFields(
                         fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
@@ -252,7 +252,8 @@ class RestDocsTest extends RestDocsSupport {
                         fieldWithPath("time").ignored(),
                         fieldWithPath("data.title").type(JsonFieldType.STRING).description("제목"),
                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("내용"),
-                        fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("회원 아이디"),
+                        fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("유저 아이디"),
+                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("작성자 이메일"),
                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("생성 시간"),
                         fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("수정 시간")
                     )
@@ -265,7 +266,7 @@ class RestDocsTest extends RestDocsSupport {
             .body("time", notNullValue())
             .body("data.title",equalTo("title"))
             .body("data.content",equalTo("content"))
-            .body("data.userId", equalTo(user.getId().intValue()))
+            .body("data.email", equalTo(user.getEmail()))
             .body("data.createdAt", notNullValue())
             .body("data.modifiedAt", notNullValue());
         //@formatter:on
@@ -297,7 +298,7 @@ class RestDocsTest extends RestDocsSupport {
                                 headerWithName("Authorization").description("인증 토큰")
                             ),
                             queryParameters(
-                                parameterWithName("userId").description("회원 아이디")
+                                parameterWithName("userId").description("작성자 이메일")
                             ),
                             pathParameters(
                               parameterWithName("postId").description("포스팅 아이디")
@@ -310,7 +311,8 @@ class RestDocsTest extends RestDocsSupport {
                                 fieldWithPath("time").ignored(),
                                 fieldWithPath("data.title").type(JsonFieldType.STRING).description("수정된 제목"),
                                 fieldWithPath("data.content").type(JsonFieldType.STRING).description("수정된 내용"),
-                                fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("회원 아이디"),
+                                fieldWithPath("data.email").type(JsonFieldType.STRING).description("작성자 이메일"),
+                                fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("유저 아이디"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("생성 시간"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("수정 시간")
                             )
@@ -323,7 +325,7 @@ class RestDocsTest extends RestDocsSupport {
             .body("time", notNullValue())
             .body("data.title", equalTo("title1"))
             .body("data.content", equalTo("content1"))
-            .body("data.userId", equalTo(user.getId().intValue()))
+            .body("data.email", equalTo(user.getEmail()))
             .body("data.createdAt", notNullValue())
             .body("data.modifiedAt", notNullValue());
         //@formatter:on
@@ -349,20 +351,7 @@ class RestDocsTest extends RestDocsSupport {
                         modifyUris().scheme("http").host("localhost").removePort(),
                         prettyPrint()
                     ),
-                    preprocessResponse(prettyPrint()),
-                    requestHeaders(
-                        headerWithName("Authorization").description("인증 토큰")
-                    ),
-                    queryParameters(
-                        parameterWithName("userId").description("회원 아이디")
-                    ),
-                    pathParameters(
-                        parameterWithName("postId").description("포스팅 아이디")
-                    ),
-                    requestFields(
-                        fieldWithPath("title").type(JsonFieldType.STRING).description("수정할 제목"),
-                        fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 내용")
-                    )
+                    preprocessResponse(prettyPrint())
                 )
             )
             .when()
@@ -398,7 +387,8 @@ class RestDocsTest extends RestDocsSupport {
                     fieldWithPath("time").ignored(),
                     fieldWithPath("data.title").type(JsonFieldType.STRING).description("제목"),
                     fieldWithPath("data.content").type(JsonFieldType.STRING).description("내용"),
-                    fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("회원 아이디"),
+                    fieldWithPath("data.email").type(JsonFieldType.STRING).description("작성자 이메일"),
+                    fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("유저 아이디"),
                     fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("생성 시간"),
                     fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("수정 시간")
                 )
@@ -411,7 +401,7 @@ class RestDocsTest extends RestDocsSupport {
             .body("time", notNullValue())
             .body("data.title",equalTo("title"))
             .body("data.content",equalTo("content"))
-            .body("data.userId", equalTo(user.getId().intValue()))
+            .body("data.email", equalTo(user.getEmail()))
             .body("data.createdAt", notNullValue())
             .body("data.modifiedAt", notNullValue());
         //@formatter:on
@@ -515,6 +505,7 @@ class RestDocsTest extends RestDocsSupport {
         given(super.spec)
             .log().all()
             .header("Authorization", token)
+            .queryParam("userId", user.getId())
             .filter(document("post-delete",
                     preprocessRequest(
                         modifyUris().scheme("http").host("localhost").removePort(),
@@ -523,6 +514,9 @@ class RestDocsTest extends RestDocsSupport {
                     preprocessResponse(prettyPrint()),
                     requestHeaders(
                         headerWithName("Authorization").description("인증 토큰")
+                    ),
+                    queryParameters(
+                      parameterWithName("userId").description("유저 아이디")
                     ),
                     pathParameters(
                         parameterWithName("postId").description("포스팅 아이디")
@@ -535,6 +529,36 @@ class RestDocsTest extends RestDocsSupport {
             .log().all()
             .statusCode(HttpStatus.OK.value())
             .body("data", equalTo("delete complete"));
+        //@formatter:on
+    }
+
+    @DisplayName("posting 작성자가 아닌 다른 유저가 삭제를 시도할 시 예외를 던진다.")
+    @Test
+    void delete_exception() throws Exception {
+        //given
+        Post post = postService.posting(user.getId(), new PostCreateDto("title", "content"));
+
+        //@formatter:off
+        given(super.spec)
+            .log().all()
+            .header("Authorization", token)
+            .queryParam("userId", 12312L)
+            .filter(document("post-delete-error",
+                    preprocessRequest(
+                        modifyUris().scheme("http").host("localhost").removePort(),
+                        prettyPrint()
+                    ),
+                    preprocessResponse(prettyPrint())
+                )
+            )
+        .when()
+            .delete("/posts/{postId}", post.getId())
+        .then()
+            .log().all()
+            .statusCode(HttpStatus.BAD_REQUEST.value())
+            .body("time", notNullValue())
+            .body("data.status", equalTo(400))
+            .body("data.msg", equalTo(ExceptionCode.NOT_MATCHING_OWNER.getMsg()));
         //@formatter:on
     }
 
