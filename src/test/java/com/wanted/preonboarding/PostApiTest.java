@@ -66,7 +66,7 @@ class PostApiTest extends ApiTest {
                 .body("time", notNullValue())
                 .body("data.title",equalTo("title"))
                 .body("data.content",equalTo("content"))
-                .body("data.userId", equalTo(user.getId().intValue()))
+                .body("data.email", equalTo(user.getEmail()))
                 .body("data.createdAt", notNullValue())
                 .body("data.modifiedAt", notNullValue());
         //@formatter:on
@@ -96,7 +96,7 @@ class PostApiTest extends ApiTest {
                 .body("time", notNullValue())
                 .body("data.title", equalTo("title1"))
                 .body("data.content", equalTo("content1"))
-                .body("data.userId", equalTo(user.getId().intValue()))
+                .body("data.email", equalTo(user.getEmail()))
                 .body("data.createdAt", notNullValue())
                 .body("data.modifiedAt", notNullValue());
         //@formatter:on
@@ -144,7 +144,7 @@ class PostApiTest extends ApiTest {
                 .body("time", notNullValue())
                 .body("data.title",equalTo("title"))
                 .body("data.content",equalTo("content"))
-                .body("data.userId", equalTo(user.getId().intValue()))
+                .body("data.email", equalTo(user.getEmail()))
                 .body("data.createdAt", notNullValue())
                 .body("data.modifiedAt", notNullValue());
         //@formatter:on
@@ -159,6 +159,7 @@ class PostApiTest extends ApiTest {
         //@formatter:off
         given()
                 .log().all()
+                .queryParam("userId", user.getId())
                 .header("Authorization", token)
         .when()
                 .delete("/posts/{postId}", post.getId())
@@ -166,6 +167,28 @@ class PostApiTest extends ApiTest {
                 .log().all()
                 .statusCode(HttpStatus.OK.value())
                 .body("data", equalTo("delete complete"));
+        //@formatter:on
+    }
+
+    @DisplayName("posting 작성자가 아닌 다른 유저가 삭제를 시도할 시 예외를 던진다.")
+    @Test
+    void delete_exception() throws Exception {
+        //given
+        Post post = postService.posting(user.getId(), new PostCreateDto("title", "content"));
+
+        //@formatter:off
+        given()
+                .log().all()
+                .header("Authorization", token)
+                .queryParam("userId", 12312L)
+        .when()
+                .delete("/posts/{postId}", post.getId())
+        .then()
+                .log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("time", notNullValue())
+                .body("data.status", equalTo(400))
+                .body("data.msg", equalTo(ExceptionCode.NOT_MATCHING_OWNER.getMsg()));
         //@formatter:on
     }
 

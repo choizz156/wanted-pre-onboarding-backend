@@ -173,18 +173,33 @@ class PostServiceTest {
             .hasMessageContaining(ExceptionCode.NOT_FOUND_POST.getMsg());
     }
 
-    @DisplayName("특정 posting을 삭제할 수 있다.")
+    @DisplayName("특정 posting은 작성자 만이 삭제할 수 있다.")
     @Test
     void delete() throws Exception {
         //given
-        Post post = postRepository.save(new Post("title", "content"));
+        PostCreateDto dto = new PostCreateDto("title", "content");
+        Post post = postService.posting(user.getId(), dto);
 
         //when
-        postService.delete(post.getId());
+        postService.delete(user.getId(), post.getId());
 
         //then
         List<Post> all = postRepository.findAll();
         assertThat(all).isEmpty();
+    }
+
+    @DisplayName("posting 작성자가 아닌 다른 유저가 삭제를 시도할 시 예외를 던진다.")
+    @Test
+    void delete_exception() throws Exception {
+        //given
+        PostCreateDto dto = new PostCreateDto("title", "content");
+        Post post = postService.posting(user.getId(), dto);
+        Long postId = post.getId();
+
+        //expected
+        assertThatThrownBy(() -> postService.delete(123L, postId))
+            .isInstanceOf(BusinessLoginException.class)
+            .hasMessageContaining(ExceptionCode.NOT_MATCHING_OWNER.getMsg());
     }
 
     @DisplayName("posting 목록을 조회할 경우, 1페이지 당 10개씩 페이지네이션이 된다.(기본값)")
@@ -197,7 +212,7 @@ class PostServiceTest {
                 .content("content " + i)
                 .user(user)
                 .build()
-        ).toList();
+            ).toList();
 
         postRepository.saveAll(posts);
 
@@ -220,7 +235,7 @@ class PostServiceTest {
                 .content("content " + i)
                 .user(user)
                 .build()
-        ).toList();
+            ).toList();
 
         postRepository.saveAll(posts);
 

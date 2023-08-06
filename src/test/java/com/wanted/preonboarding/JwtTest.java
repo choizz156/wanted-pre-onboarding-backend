@@ -5,9 +5,11 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Calendar;
@@ -34,14 +36,15 @@ class JwtTest {
         jwtTokenProvider = new JwtTokenProvider(new SecretKey());
     }
 
-    @DisplayName("액세스 토큰 발급이 발급된다.")
+    @DisplayName("액세스 토큰과 리프레시 토큰이 발급이 발급된다.")
     @Test
     void acccesToken() throws Exception {
         //given when
         String accessToken = getAccessToken(Calendar.MINUTE, 10, key);
-
+        String refreshToken = getRefreshToken(Calendar.MINUTE, 10, key);
         //then
         assertThat(accessToken).isNotNull();
+        assertThat(refreshToken).isNotNull();
     }
 
     @DisplayName("jws 검증할 경우 예외를 던지 않는다.")
@@ -68,6 +71,44 @@ class JwtTest {
         ).isInstanceOf(ExpiredJwtException.class);
     }
 
+    @DisplayName("refresh token의 기한이 지나면 예외를 던진다.")
+    @Test
+    void expirationTest2() throws Exception {
+        //given
+        String refreshToken = getRefreshToken(Calendar.SECOND, 1, key);
+
+        TimeUnit.SECONDS.sleep(2);
+
+        //expected
+        assertThatCode(() ->
+            jwtTokenProvider.getJws(refreshToken, key)
+        ).isInstanceOf(ExpiredJwtException.class);
+    }
+
+    @DisplayName("토큰이 잘못된 형식이라면 예외를 던집니다.")
+    @Test
+    void signature() throws Exception {
+        //given
+        String refreshToken = getRefreshToken(Calendar.SECOND, 1, key) + 1;
+
+        //expected
+        assertThatCode(() ->
+            jwtTokenProvider.getJws(refreshToken, key)
+        ).isInstanceOf(SignatureException.class);
+    }
+
+    @DisplayName("토큰이 잘못된 형식이라면 예외를 던집니다.")
+    @Test
+    void malformed() throws Exception {
+        //given
+        String refreshToken = 1 + getRefreshToken(Calendar.SECOND, 1, key);
+
+        //expected
+        assertThatCode(() ->
+            jwtTokenProvider.getJws(refreshToken, key)
+        ).isInstanceOf(MalformedJwtException.class);
+    }
+
     private String getAccessToken(int timeUnit, int timeAmount, final Key key) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("memberId", 1);
@@ -79,6 +120,16 @@ class JwtTest {
         Date expiration = calendar.getTime();
 
         return jwtTokenProvider.createAccessToken(claims, subject, expiration, key);
+    }
+
+    private String getRefreshToken(int timeUnit, int timeAmount, final Key key) {
+
+        String subject = "test refresh token";
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(timeUnit, timeAmount);
+        Date expiration = calendar.getTime();
+
+        return jwtTokenProvider.createRefreshToken(subject, expiration, key);
     }
 
     private Key getKey() {

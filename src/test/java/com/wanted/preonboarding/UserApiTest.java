@@ -177,4 +177,5 @@ class UserApiTest extends ApiTest {
                 .body("data.customFieldErrors[0].reason", equalTo("비밀번호는 8자리 이상이어야 합니다."));
         //@formatter:on
     }
+
 }
