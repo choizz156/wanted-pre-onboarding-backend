@@ -22,4 +22,10 @@ public class GlobalExceptionHandler {
     public ResponseDto<ErrorResponse> businessLogicExceptionHandler(BusinessLoginException e) {
         return new ResponseDto<>(ErrorResponse.of(e.getMessage()));
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseDto<ErrorResponse> RuntimeExceptionHandler(RuntimeException e) {
+        return new ResponseDto<>(ErrorResponse.of(e.getMessage()));
+    }
 }

@@ -57,7 +57,6 @@ public class PostController {
         @RequestParam Integer page,
         @RequestParam(required = false) Integer size
     ) {
-        log.error("{}, {}", page, size);
         List<PostResponse> lists = queryPostService.getLists(page, size);
         return new ResponseDto<>(lists);
     }
@@ -70,5 +69,4 @@ public class PostController {
         postService.delete(userId, postId);
         return new ResponseDto<>(DELETE_COMPLETE);
     }
-
 }

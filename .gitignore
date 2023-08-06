@@ -333,4 +333,4 @@ gradle-app.setting
 
 application.yml
 application-auth.yml
-
+application-prod.yml
