@@ -44,7 +44,21 @@ include::{snippets}/post-get/http-response.adoc[]
 include::{snippets}/post-get/response-fields.adoc[]
 
 ---
-==== `(2) 여러 개 조회(기본 페이지당 10개 사이즈, 내림차순)`
+==== `(2) 여러 개 조회(size null)`
+
+|===
+| parameter | description
+
+| `size`
+| pagination 개수 (null일 경우, 기본값 10)
+
+| `page`
+| 페이지 번호 (1 이상)
+
+| `sort`
+| 최신 순
+|===
+
 ==== HTTP Request
 include::{snippets}/post-page/http-request.adoc[]
 include::{snippets}/post-page/query-parameters.adoc[]
@@ -54,7 +68,7 @@ include::{snippets}/post-page/http-response.adoc[]
 
 ---
 
-==== `(3) 여러 개 조회(유저가 사이즈 선택, 내림차순)`
+==== `(3) 여러 개 조회(size 지정)'
 ==== HTTP Request
 include::{snippets}/post-page2/http-request.adoc[]
 include::{snippets}/post-page2/query-parameters.adoc[]
