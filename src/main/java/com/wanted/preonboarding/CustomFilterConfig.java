@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 public class CustomFilterConfig extends AbstractHttpConfigurer<CustomFilterConfig, HttpSecurity> {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final RefreshService refreshService;
+    private final ResponseTokenService responseTokenService;
 
     @Override
     public void configure(final HttpSecurity builder) throws Exception {
@@ -24,10 +23,10 @@ public class CustomFilterConfig extends AbstractHttpConfigurer<CustomFilterConfi
 
         jwtLoginFilter.setAuthenticationFailureHandler(new UserFailureHandler());
         jwtLoginFilter.setAuthenticationSuccessHandler(
-            new UserSuccessHandler(jwtTokenProvider, refreshTokenRepository)
+            new UserSuccessHandler(responseTokenService)
         );
         JwtVerificationFilter jwtVerificationFilter =
-            new JwtVerificationFilter(jwtTokenProvider, refreshService);
+            new JwtVerificationFilter(jwtTokenProvider, responseTokenService);
 
         builder.addFilter(jwtLoginFilter)
             .addFilterAfter(jwtVerificationFilter, JwtLoginFilter.class);

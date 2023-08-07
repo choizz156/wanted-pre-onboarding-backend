@@ -1,5 +1,7 @@
 package com.wanted.preonboarding;
 
+import static com.wanted.preonboarding.AuthErrorResponse.sendError;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +23,6 @@ public class UserFailureHandler implements AuthenticationFailureHandler {
         final AuthenticationException exception
     ) throws IOException, ServletException {
         log.error("login fail");
-        ErrorResponser.sendError(response, exception, HttpStatus.UNAUTHORIZED);
+        sendError(response, exception, HttpStatus.UNAUTHORIZED);
     }
 }

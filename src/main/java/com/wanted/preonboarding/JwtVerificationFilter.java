@@ -29,7 +29,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RefreshService refreshService;
+    private final ResponseTokenService responseTokenService;
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String EXCEPTION_KEY = "exception";
@@ -141,7 +141,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private boolean isDelegatePossible(final HttpServletRequest request, final String refreshJws) {
         String subject = (String) verifyJws(request, refreshJws).get("sub");
-        Optional<String> refreshToken = refreshService.checkToken(subject);
+        Optional<String> refreshToken = responseTokenService.checkToken(subject);
         if (refreshToken.isPresent()) {
             request.setAttribute("refresh", subject);
             return true;

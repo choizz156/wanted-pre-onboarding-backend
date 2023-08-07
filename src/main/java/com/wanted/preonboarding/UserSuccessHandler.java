@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final ResponseTokenService responseTokenService;
 
     @Override
     public void onAuthenticationSuccess(
@@ -25,12 +24,6 @@ public class UserSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         UserDetailsEntity principal = (UserDetailsEntity) authentication.getPrincipal();
         User user = principal.user();
-        String accessToken = jwtTokenProvider.delegateAccessToken(user);
-        String refreshToken = jwtTokenProvider.delegateRefreshToken(user);
-
-        refreshTokenRepository.save(user.getEmail(),refreshToken);
-
-        response.setHeader("Authorization", "Bearer " + accessToken);
-        response.setHeader("Refresh", refreshToken);
+        responseTokenService.delegateToken(response,user);
     }
 }

@@ -19,8 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final RefreshService refreshService;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final ResponseTokenService responseTokenService;
 
     private static final String POST_URL = "/posts/**";
 
@@ -37,11 +36,11 @@ public class SecurityConfig {
             .exceptionHandling(exceptionHandling -> {
                     exceptionHandling.accessDeniedHandler(new UserAccessDeniedHandler());
                     exceptionHandling.authenticationEntryPoint(
-                        new UserAuthenticationEntryPoint(refreshService)
+                        new UserAuthenticationEntryPoint(responseTokenService)
                     );
                 }
             )
-            .apply(new CustomFilterConfig(jwtTokenProvider, refreshTokenRepository, refreshService));
+            .apply(new CustomFilterConfig(jwtTokenProvider, responseTokenService));
 
         http.authorizeHttpRequests(auth -> {
             auth.requestMatchers(HttpMethod.POST, POST_URL).hasRole("USER");

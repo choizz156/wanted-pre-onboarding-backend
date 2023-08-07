@@ -1,6 +1,7 @@
 package com.wanted.preonboarding;
 
-import jakarta.servlet.ServletException;
+import static com.wanted.preonboarding.AuthErrorResponse.sendError;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,8 +20,8 @@ public class UserAccessDeniedHandler implements AccessDeniedHandler {
         final HttpServletRequest request,
         final HttpServletResponse response,
         final AccessDeniedException accessDeniedException
-    ) throws IOException, ServletException {
+    ) throws IOException  {
         log.error("no authorization");
-        ErrorResponser.sendError(response, accessDeniedException, HttpStatus.FORBIDDEN);
+        sendError(response, accessDeniedException, HttpStatus.FORBIDDEN);
     }
 }
