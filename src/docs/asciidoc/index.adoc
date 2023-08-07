@@ -56,8 +56,8 @@ include::user.adoc[]
 {
     "time": "2023-08-06T07:29:45.972193",
     "data": {
-        "status": 403,
-        "msg": "Full authentication is required to access this resource"
+ㅁ        "status": 401,
+         "msg": "No Token"
     }
 }
 ```
