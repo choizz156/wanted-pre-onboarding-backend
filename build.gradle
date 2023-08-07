@@ -72,16 +72,16 @@ clean {
     delete file('src/main/generated') // 인텔리제이 Annotation processor 생성물 생성위치
 }
 
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
 ext {
     snippetsDir = file('build/generated-snippets')
 }
 
 test {
     outputs.dir snippetsDir
-}
-
-asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')
 }
 
 asciidoctor {
@@ -97,10 +97,7 @@ asciidoctor {
 
 bootJar {
     dependsOn asciidoctor
-    from("${asciidoctor.outputDir}")
-    into 'static/docs'
-}
-
-test {
-    useJUnitPlatform()
+    from("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
 }
