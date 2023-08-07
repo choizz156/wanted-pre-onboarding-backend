@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+@DisplayName("authorization test")
 class AuthTest extends ApiTest {
 
     @Autowired

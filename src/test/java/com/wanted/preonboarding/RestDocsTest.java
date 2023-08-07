@@ -40,6 +40,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+
+@DisplayName("api docs test")
 class RestDocsTest extends RestDocsSupport {
 
     @Autowired

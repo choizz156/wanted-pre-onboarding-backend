@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@DisplayName("user api 테스트, 로그인 포함")
+@DisplayName("user api, login test")
 class UserApiTest extends ApiTest {
 
     @Autowired

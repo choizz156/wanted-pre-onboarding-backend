@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+@DisplayName("refresh token test")
 class RefreshTokenTest extends ApiTest{
 
     @Autowired
@@ -35,17 +36,16 @@ class RefreshTokenTest extends ApiTest{
 
         //@formatter:off
         given()
-            .log().all()
-            .header("Refresh", token)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("userId", user.getId())
-            .body(postCreateDto)
-            .when()
-            .post("/posts")
-            .then()
-            .log().all()
-            .header("Authorization", Matchers.notNullValue());
-
+                .log().all()
+                .header("Refresh", token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("userId", user.getId())
+                .body(postCreateDto)
+        .when()
+                .post("/posts")
+        .then()
+                .log().all()
+                .header("Authorization", Matchers.notNullValue());
         //@formatter:on
     }
 
