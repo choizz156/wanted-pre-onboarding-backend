@@ -18,8 +18,9 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto<String> post(@Valid @RequestBody JoinDto joinDto) {
+    public SingleResponseDto<String> post(@Valid @RequestBody JoinDto joinDto) {
         User user = userService.signUp(joinDto);
-        return new ResponseDto<>(user.getEmail());
+        return new SingleResponseDto<>(user.getEmail());
     }
 }
+
