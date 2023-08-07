@@ -1,5 +1,6 @@
 package com.wanted.preonboarding;
 
+import jakarta.validation.constraints.Min;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,45 +29,45 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseDto<PostResponse> post(
+    public SingleResponseDto<PostResponse> post(
         @RequestParam Long userId,
         @RequestBody PostCreateDto postCreateDto
     ) {
         Post post = postService.posting(userId, postCreateDto);
-        return new ResponseDto<>(PostResponse.of(post));
+        return new SingleResponseDto<>(PostResponse.of(post));
     }
 
     @PatchMapping("/{postId}")
-    public ResponseDto<PostResponse> edit(
+    public SingleResponseDto<PostResponse> edit(
         @PathVariable Long postId,
         @RequestParam Long userId,
         @RequestBody PostEditDto postEditDto
     ) {
         Post edit = postService.edit(userId, postId, postEditDto);
-        return new ResponseDto<>(PostResponse.of(edit));
+        return new SingleResponseDto<>(PostResponse.of(edit));
     }
 
     @GetMapping("/{postId}")
-    public ResponseDto<PostResponse> search(@PathVariable Long postId) {
+    public SingleResponseDto<PostResponse> search(@PathVariable Long postId) {
         Post post = queryPostService.getPost(postId);
-        return new ResponseDto<>(PostResponse.of(post));
+        return new SingleResponseDto<>(PostResponse.of(post));
     }
 
     @GetMapping
-    public ResponseDto<List<PostResponse>> paging(
-        @RequestParam Integer page,
+    public MultiResponseDto<List<PostResponse>> paging(
+        @RequestParam @Min(1) int page,
         @RequestParam(required = false) Integer size
     ) {
         List<PostResponse> lists = queryPostService.getLists(page, size);
-        return new ResponseDto<>(lists);
+        return MultiResponseDto.of(page, size, lists);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseDto<String> delete(
+    public SingleResponseDto<String> delete(
         @PathVariable Long postId,
         @RequestParam Long userId
     ) {
         postService.delete(userId, postId);
-        return new ResponseDto<>(DELETE_COMPLETE);
+        return new SingleResponseDto<>(DELETE_COMPLETE);
     }
 }
