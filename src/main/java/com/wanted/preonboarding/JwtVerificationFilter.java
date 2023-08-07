@@ -12,14 +12,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,11 +24,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
 
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String EXCEPTION_KEY = "exception";
+
     private final JwtTokenProvider jwtTokenProvider;
     private final ResponseTokenService responseTokenService;
 
-    private static final String AUTHORIZATION = "Authorization";
-    private static final String EXCEPTION_KEY = "exception";
 
     @Override
     protected boolean shouldNotFilter(final HttpServletRequest request) {
@@ -126,8 +123,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         String username = (String) claims.get("username");
         String roles = (String) claims.get("roles");
 
-        List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList("ROLE_" + roles);
-        Authentication authentication =
+        var authorityList = AuthorityUtils.createAuthorityList("ROLE_" + roles);
+        var authentication =
             new UsernamePasswordAuthenticationToken(username, null, authorityList);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -140,8 +137,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     }
 
     private boolean isDelegatePossible(final HttpServletRequest request, final String refreshJws) {
-        String subject = (String) verifyJws(request, refreshJws).get("sub");
-        Optional<String> refreshToken = responseTokenService.checkToken(subject);
+        var subject = (String) verifyJws(request, refreshJws).get("sub");
+        var refreshToken = responseTokenService.checkToken(subject);
         if (refreshToken.isPresent()) {
             request.setAttribute("refresh", subject);
             return true;

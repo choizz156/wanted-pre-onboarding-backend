@@ -210,7 +210,7 @@ class PostApiTest extends ApiTest {
         //@formatter:off
         given()
                 .log().all()
-                .queryParam("page", 0)
+                .queryParam("page", 1)
         .when()
                 .get("/posts")
         .then()

@@ -41,7 +41,7 @@ public class Post extends BaseEntity {
     public void addUser(final User user) {
         this.user = user;
 
-        if(!user.getPosts().contains(this)){
+        if(!user.isContain(this)){
            this.user.addPost(this);
         }
     }

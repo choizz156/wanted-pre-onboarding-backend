@@ -27,7 +27,7 @@ public class AuthErrorResponse {
         ErrorResponse errorInfo = ErrorResponse.of(status, exception.getMessage());
 
         String errorResponse =
-            Mapper.getInstance().writeValueAsString(new ResponseDto<>(errorInfo));
+            Mapper.getInstance().writeValueAsString(new SingleResponseDto<>(errorInfo));
 
         response.getWriter().write(errorResponse);
     }

@@ -17,11 +17,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private static final String POST_URL = "/posts/**";
 
     private final JwtTokenProvider jwtTokenProvider;
     private final ResponseTokenService responseTokenService;
 
-    private static final String POST_URL = "/posts/**";
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

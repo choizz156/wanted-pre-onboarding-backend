@@ -83,7 +83,6 @@ public class JwtTokenProvider {
     }
 
     public String delegateRefreshToken(User user) {
-
         String subject = String.valueOf(user.getEmail());
         Date expiration = getExpiration(refreshTokenExpirationMinutes);
         Key key = secretKey.getSecretKey();

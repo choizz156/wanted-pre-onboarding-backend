@@ -59,4 +59,8 @@ public class User extends BaseEntity {
     public boolean isSameUser(final Long userId) {
         return id.equals(userId);
     }
+
+    public boolean isContain(final Post post) {
+        return posts.contains(post);
+    }
 }

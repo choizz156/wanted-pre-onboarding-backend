@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseDto<ErrorResponse> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-        return new ResponseDto<>(ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getBindingResult()));
+    public SingleResponseDto<ErrorResponse> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+        return new SingleResponseDto<>(ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getBindingResult()));
     }
 
     @ExceptionHandler(BusinessLoginException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseDto<ErrorResponse> businessLogicExceptionHandler(BusinessLoginException e) {
-        return new ResponseDto<>(ErrorResponse.of(e.getMessage()));
+    public SingleResponseDto<ErrorResponse> businessLogicExceptionHandler(BusinessLoginException e) {
+        return new SingleResponseDto<>(ErrorResponse.of(e.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseDto<ErrorResponse> runtimeExceptionHandler(RuntimeException e) {
-        return new ResponseDto<>(ErrorResponse.of(e.getMessage()));
+    public SingleResponseDto<ErrorResponse> runtimeExceptionHandler(RuntimeException e) {
+        return new SingleResponseDto<>(ErrorResponse.of(e.getMessage()));
     }
 }

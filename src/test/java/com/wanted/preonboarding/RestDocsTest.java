@@ -436,6 +436,8 @@ class RestDocsTest extends RestDocsSupport {
                         parameterWithName("page").description("페이지(1부터 시작)")
                     ),
                     responseFields(
+                        fieldWithPath("size").type(JsonFieldType.NUMBER).description("포스팅 갯수"),
+                        fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지 번호 갯수"),
                         fieldWithPath("time").ignored(),
                         subsectionWithPath("data").ignored()
                     )
@@ -481,6 +483,8 @@ class RestDocsTest extends RestDocsSupport {
                         parameterWithName("size").description("유저가 원하는 사이즈").optional()
                     ),
                     responseFields(
+                        fieldWithPath("size").type(JsonFieldType.NUMBER).description("포스팅 갯수"),
+                        fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지 번호 갯수"),
                         fieldWithPath("time").ignored(),
                         subsectionWithPath("data").ignored()
                     )

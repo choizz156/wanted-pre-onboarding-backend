@@ -41,7 +41,6 @@ public class PostService {
     }
 
     public void delete(final Long userId, final Long postId) {
-
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new BusinessLoginException(ExceptionCode.NOT_FOUND_POST));
 
@@ -52,7 +51,6 @@ public class PostService {
 
 
     private void editPost(final PostEditDto postEditDto, final Post post) {
-
         if (isDifferentTitle(postEditDto, post)) {
             post.editTitle(postEditDto.title());
         }

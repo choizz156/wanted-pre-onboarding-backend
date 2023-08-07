@@ -3,9 +3,11 @@ package com.wanted.preonboarding;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -31,8 +33,8 @@ public class QueryPostService {
 
     private PostSearching getPostSearching(final Integer page, final Integer size) {
         return isDefault(size)
-            ? new PostSearching()
-            : new PostSearching(page, size);
+            ? PostSearching.defualtInstance()
+            : PostSearching.of(page, size);
     }
 
     private boolean isDefault(final Integer size) {
