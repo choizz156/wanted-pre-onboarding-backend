@@ -44,10 +44,10 @@ include::{snippets}/post-get/http-response.adoc[]
 include::{snippets}/post-get/response-fields.adoc[]
 
 ---
-==== `(2) 여러 개 조회(size null)`
-
+==== `(2) 여러 개 조회`
+==== 조회 시 필요한 파라미터
 |===
-| parameter | description
+| parameter | default
 
 | `size`
 | pagination 개수 (null일 경우, 기본값 10)
@@ -56,7 +56,7 @@ include::{snippets}/post-get/response-fields.adoc[]
 | 페이지 번호 (1 이상)
 
 | `sort`
-| 최신 순
+| desc (null일 경우, 최신 순)
 |===
 
 ==== HTTP Request
@@ -68,15 +68,25 @@ include::{snippets}/post-page/http-response.adoc[]
 
 ---
 
-==== `(3) 여러 개 조회(size 지정)'
+==== `(3) 여러 개 조회(size 지정)`
 ==== HTTP Request
 include::{snippets}/post-page2/http-request.adoc[]
 include::{snippets}/post-page2/query-parameters.adoc[]
 
 ==== HTTP Response
 include::{snippets}/post-page2/http-response.adoc[]
-
 ---
+
+=== `(4) 여러개 조회(오래된 순)`
+==== HTTP Request
+include::{snippets}/post-page3/http-request.adoc[]
+include::{snippets}/post-page3/query-parameters.adoc[]
+
+==== HTTP Response
+include::{snippets}/post-page3/http-response.adoc[]
+---
+
+
 === `posting 삭제(작성자만 삭제 가능)`
 ==== HTTP Request
 include::{snippets}/post-delete/http-request.adoc[]
