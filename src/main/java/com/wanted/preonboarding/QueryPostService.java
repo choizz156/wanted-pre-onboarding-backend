@@ -23,21 +23,19 @@ public class QueryPostService {
         );
     }
 
-    public List<PostResponse> getLists(final Integer page, final Integer size) {
-        PostSearching postSearching = getPostSearching(page, size);
+    public List<PostResponse> getLists(final int page, final Integer size, final Sort sort) {
+        PostSearching postSearching = getPostSearching(page, size, sort);
 
         return postRepository.findLists(postSearching).stream()
             .map(PostResponse::of)
             .toList();
     }
 
-    private PostSearching getPostSearching(final Integer page, final Integer size) {
-        return isDefault(size)
-            ? PostSearching.defualtInstance()
-            : PostSearching.of(page, size);
-    }
-
-    private boolean isDefault(final Integer size) {
-        return size == null;
+    private PostSearching getPostSearching(
+        final int page,
+        final Integer size,
+        final Sort sort
+    ) {
+        return PostSearching.of(page, size, sort);
     }
 }

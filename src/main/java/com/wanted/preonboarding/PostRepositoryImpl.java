@@ -2,6 +2,7 @@ package com.wanted.preonboarding;
 
 import static com.wanted.preonboarding.QPost.post;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,11 @@ public class PostRepositoryImpl implements QueryPostRepository {
         return jpaQueryFactory.selectFrom(post)
             .limit(postSearching.getSize())
             .offset(postSearching.getOffset())
-            .orderBy(post.id.desc())
+            .orderBy(getSort(postSearching))
             .fetch();
+    }
+
+    private OrderSpecifier<Long> getSort(final PostSearching postSearching) {
+        return postSearching.getSort() == Sort.DESC ? post.id.desc() : post.id.asc();
     }
 }

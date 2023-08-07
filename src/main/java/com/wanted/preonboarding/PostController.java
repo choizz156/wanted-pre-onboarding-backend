@@ -56,10 +56,11 @@ public class PostController {
     @GetMapping
     public MultiResponseDto<List<PostResponse>> paging(
         @RequestParam @Min(1) int page,
-        @RequestParam(required = false) Integer size
+        @RequestParam(required = false) Integer size,
+        @RequestParam(required = false) Sort sort
     ) {
-        List<PostResponse> lists = queryPostService.getLists(page, size);
-        return MultiResponseDto.of(page, size, lists);
+        List<PostResponse> lists = queryPostService.getLists(page, size, sort);
+        return MultiResponseDto.of(page, size, sort, lists);
     }
 
     @DeleteMapping("/{postId}")

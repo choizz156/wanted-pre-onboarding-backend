@@ -14,25 +14,23 @@ public class PostSearching {
     private static final int DEFAULT_SIZE = 10;
     private static final int MAX_SIZE = 1000;
     private static final int MIN_PAGE = 1;
+    private static final Sort DEFAULT_SORT = Sort.DESC;
 
-    private int page = MIN_PAGE;
-    private int size = DEFAULT_SIZE;
+    private int page ;
+    private Integer size;
+    private Sort sort;
 
-    private PostSearching(final int page, final int size) {
-        this.page = (page == 0 ? 1 : page);
-        this.size = size;
+    private PostSearching(final int page, final Integer size, final Sort sort) {
+        this.page = (page == 0 ? MIN_PAGE : page);
+        this.size = (size == null ? DEFAULT_SIZE : size);
+        this.sort = (sort == null ? Sort.DESC : Sort.ASC);
     }
 
-    public static PostSearching of(final int page, final int size) {
-        return new PostSearching(page, size);
-    }
-
-    public static PostSearching defualtInstance() {
-        return new PostSearching();
+    public static PostSearching of(final int page, final Integer size, final Sort sort) {
+        return new PostSearching(page, size, sort);
     }
 
     public long getOffset() {
         return (long) (max(MIN_PAGE, page) - 1) * min(size, MAX_SIZE);
     }
-
 }
