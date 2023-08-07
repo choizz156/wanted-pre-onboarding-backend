@@ -222,7 +222,7 @@ class PostApiTest extends ApiTest {
         //@formatter:on
     }
 
-    @DisplayName("사용자가 posting 목록의 갯수를 정할 시 사용자가 정한 갯수대로 페이지네이션된다.")
+    @DisplayName("사용자가 posting 목록의 갯수를 정할 시 사용자가 정한 갯수대로 오름차순 페이지네이션된다.")
     @Test
     void pagination2() throws Exception {
         IntStream.range(0, 30).forEach(
@@ -240,13 +240,14 @@ class PostApiTest extends ApiTest {
                 .log().all()
                 .queryParam("page", 0)
                 .queryParam("size",20)
+                .queryParam("sort",Sort.ASC)
         .when()
                 .get("/posts")
         .then()
                 .log().all()
                 .body("data", hasSize(20))
-                .body("data[0].title",equalTo("title29"))
-                .body("data[19].title",equalTo("title10"))
+                .body("data[0].title",equalTo("title0"))
+                .body("data[19].title",equalTo("title19"))
                 .statusCode(HttpStatus.OK.value());
         //@formatter:on
 

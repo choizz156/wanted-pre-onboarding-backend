@@ -433,11 +433,14 @@ class RestDocsTest extends RestDocsSupport {
                     ),
                     preprocessResponse(prettyPrint()),
                     queryParameters(
-                        parameterWithName("page").description("페이지(1부터 시작)")
+                        parameterWithName("page").description("페이지(1부터 시작)"),
+                        parameterWithName("size").description("유저가 선택한 사이즈").optional(),
+                        parameterWithName("sort").description("유저가 선택한 정렬 방식").optional()
                     ),
                     responseFields(
                         fieldWithPath("size").type(JsonFieldType.NUMBER).description("포스팅 갯수"),
                         fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지 번호 갯수"),
+                        fieldWithPath("sort").type(JsonFieldType.STRING).description("정렬 방식"),
                         fieldWithPath("time").ignored(),
                         subsectionWithPath("data").ignored()
                     )
@@ -480,11 +483,13 @@ class RestDocsTest extends RestDocsSupport {
                     preprocessResponse(prettyPrint()),
                     queryParameters(
                         parameterWithName("page").description("페이지(1부터 시작)"),
-                        parameterWithName("size").description("유저가 원하는 사이즈").optional()
+                        parameterWithName("size").description("유저가 선택한 사이즈").optional(),
+                        parameterWithName("sort").description("유저가 선택한 정렬 방식").optional()
                     ),
                     responseFields(
                         fieldWithPath("size").type(JsonFieldType.NUMBER).description("포스팅 갯수"),
                         fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지 번호 갯수"),
+                        fieldWithPath("sort").type(JsonFieldType.STRING).description("정렬 방식"),
                         fieldWithPath("time").ignored(),
                         subsectionWithPath("data").ignored()
                     )
@@ -499,6 +504,56 @@ class RestDocsTest extends RestDocsSupport {
             .body("data[4].title",equalTo("title25"))
             .statusCode(HttpStatus.OK.value());
         //@formatter:on
+    }
+    @DisplayName("사용자가 posting 목록의 갯수를 정할 시 사용자가 정한 갯수대로 오름차순 페이지네이션된다.")
+    @Test
+    void pagination3() throws Exception {
+        IntStream.range(0, 30).forEach(
+            i -> {
+                PostCreateDto postCreateDto = fixtureMonkey.giveMeBuilder(PostCreateDto.class)
+                    .set("title", "title" + i)
+                    .set("content", "content" + i)
+                    .sample();
+                postService.posting(user.getId(), postCreateDto);
+            }
+        );
+
+        //@formatter:off
+        given(super.spec)
+            .log().all()
+            .queryParam("page", 0)
+            .queryParam("size",20)
+            .queryParam("sort",Sort.ASC)
+            .filter(document("post-page3",
+                    preprocessRequest(
+                        modifyUris().scheme("http").host("localhost").removePort(),
+                        prettyPrint()
+                    ),
+                    preprocessResponse(prettyPrint()),
+                    queryParameters(
+                        parameterWithName("page").description("페이지(1부터 시작)"),
+                        parameterWithName("size").description("유저가 선택한 사이즈").optional(),
+                        parameterWithName("sort").description("유저가 선택한 정렬 방식").optional()
+                    ),
+                    responseFields(
+                        fieldWithPath("size").type(JsonFieldType.NUMBER).description("포스팅 갯수"),
+                        fieldWithPath("page").type(JsonFieldType.NUMBER).description("페이지 번호 갯수"),
+                        fieldWithPath("sort").type(JsonFieldType.STRING).description("정렬 방식"),
+                        fieldWithPath("time").ignored(),
+                        subsectionWithPath("data").ignored()
+                    )
+                )
+            )
+        .when()
+            .get("/posts")
+        .then()
+            .log().all()
+            .body("data", hasSize(20))
+            .body("data[0].title",equalTo("title0"))
+            .body("data[19].title",equalTo("title19"))
+            .statusCode(HttpStatus.OK.value());
+        //@formatter:on
+
     }
 
     @DisplayName("특정 posting을 삭제할 수 있다.")

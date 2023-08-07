@@ -218,7 +218,7 @@ class PostServiceTest {
         postRepository.saveAll(posts);
 
         //when
-        List<PostResponse> results = queryPostService.getLists(0, null);
+        List<PostResponse> results = queryPostService.getLists(0, null, null);
 
         //then
         assertThat(results).hasSize(10);
@@ -241,8 +241,8 @@ class PostServiceTest {
         postRepository.saveAll(posts);
 
         //when
-        List<PostResponse> results1 = queryPostService.getLists(1, 20);
-        List<PostResponse> results2 = queryPostService.getLists(2, 20);
+        List<PostResponse> results1 = queryPostService.getLists(1, 20, null);
+        List<PostResponse> results2 = queryPostService.getLists(2, 20, null);
 
         //then
         assertThat(results1).hasSize(20);
@@ -252,5 +252,33 @@ class PostServiceTest {
         assertThat(results2).hasSize(10);
         assertThat(results2.get(0).getTitle()).isEqualTo("title 9");
         assertThat(results2.get(9).getTitle()).isEqualTo("title 0");
+    }
+
+    @DisplayName("오름차순 페이지네이션")
+    @Test
+    void pagination3() throws Exception {
+        //given
+        List<Post> posts = IntStream.range(0, 30)
+            .mapToObj(i -> Post.builder()
+                .title("title " + i)
+                .content("content " + i)
+                .user(user)
+                .build()
+            ).toList();
+
+        postRepository.saveAll(posts);
+
+        //when
+        List<PostResponse> results1 = queryPostService.getLists(1, 20, Sort.ASC );
+        List<PostResponse> results2 = queryPostService.getLists(2, 20, Sort.ASC);
+
+        //then
+        assertThat(results1).hasSize(20);
+        assertThat(results1.get(0).getTitle()).isEqualTo("title 0");
+        assertThat(results1.get(19).getTitle()).isEqualTo("title 19");
+
+        assertThat(results2).hasSize(10);
+        assertThat(results2.get(0).getTitle()).isEqualTo("title 20");
+        assertThat(results2.get(9).getTitle()).isEqualTo("title 29");
     }
 }
