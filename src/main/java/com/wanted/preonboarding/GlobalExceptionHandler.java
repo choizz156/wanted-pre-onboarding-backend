@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseDto<ErrorResponse> RuntimeExceptionHandler(RuntimeException e) {
+    public ResponseDto<ErrorResponse> runtimeExceptionHandler(RuntimeException e) {
         return new ResponseDto<>(ErrorResponse.of(e.getMessage()));
     }
 }
