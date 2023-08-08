@@ -1,7 +1,7 @@
 ifndef::snippets[]
 :snippets: ../../build/generated-snippets
 endif::[]
-= pre-onboarding REST API 문서
+= wanted-pre-onboarding-backend REST API
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -9,13 +9,50 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
+== Introduction
+원티드 백엔드 인턴십 과제 api 문서입니다.
 
-== Header
+== domain
 |===
-| name | 설명
+| domain | URL
+
+| `local`
+| http://localhost:8081
+
+| `production`
+|
+|===
+
+== Authentication
+|===
+| header | description
 
 | `Authorization`
 | API를 사용하기 위한 인증 토큰
+
+| `Refresh`
+| access token을 재발급 받기 위한 토큰
+|===
+
+== Business Error Code
+|===
+| code | status |description
+
+| `EXIST_EMAIL`
+| 400
+| 이미 가입한 e-mail입니다.
+
+| `NOT_FOUND_USER`
+| 400
+| 찾을 수 없는 회원입니다.
+
+| `NOT_FOUND_POST`
+| 400
+| 찾을 수 없는 게시글입니다.
+
+| `NOT_MATCHING_OWNER`
+| 400
+| 작성자와 동일한 회원이 아닙니다.
 |===
 
 == 공통 Response
@@ -52,12 +89,13 @@ include::user.adoc[]
 - 로그인한 사용자만 토큰을 통한 인증을 통해 posting을 생성, 수정, 삭제할 수 있습니다.
 
 ==== 권한이 없을 경우 예외 응답
+
 ```json
 {
     "time": "2023-08-06T07:29:45.972193",
     "data": {
-         "status": 401,
-         "msg": "No Token"
+         "status": 403,
+         "msg": "Access Denied"
     }
 }
 ```

@@ -79,7 +79,7 @@ class RestDocsTest extends RestDocsSupport {
             .body(joinDto)
             .filter(document("user",
                         preprocessRequest(
-                            modifyUris().scheme("http").host("localhost").removePort(),
+                            modifyUris().scheme("http").host("localhost").port(8081),
                             prettyPrint()
                         ),
                         preprocessResponse(prettyPrint()),
@@ -119,7 +119,7 @@ class RestDocsTest extends RestDocsSupport {
             .body(dto2)
             .filter(document("user-error",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint()),
@@ -154,7 +154,7 @@ class RestDocsTest extends RestDocsSupport {
             .body(loginDto)
             .filter(document("user-login",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint()),
@@ -163,7 +163,8 @@ class RestDocsTest extends RestDocsSupport {
                         fieldWithPath("password").type(JsonFieldType.STRING).description("패스워드")
                     ),
                     responseHeaders(
-                        headerWithName("Authorization").description("인증 토큰")
+                        headerWithName("Authorization").description("인증 토큰"),
+                        headerWithName("Refresh").description("리프레시 토큰")
                     )
                 )
             )
@@ -201,7 +202,7 @@ class RestDocsTest extends RestDocsSupport {
             .body(loginDto)
             .filter(document("user-login-error",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint()),
@@ -236,7 +237,7 @@ class RestDocsTest extends RestDocsSupport {
             .body(postCreateDto)
             .filter(document("post",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint()),
@@ -244,7 +245,7 @@ class RestDocsTest extends RestDocsSupport {
                       headerWithName("Authorization").description("인증 토큰")
                     ),
                     queryParameters(
-                        parameterWithName("userId").description("작성자 이메일")
+                        parameterWithName("userId").description("유저 아이디")
                     ),
                     requestFields(
                         fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
@@ -254,6 +255,7 @@ class RestDocsTest extends RestDocsSupport {
                         fieldWithPath("time").ignored(),
                         fieldWithPath("data.title").type(JsonFieldType.STRING).description("제목"),
                         fieldWithPath("data.content").type(JsonFieldType.STRING).description("내용"),
+                        fieldWithPath("data.postId").type(JsonFieldType.NUMBER).description("포스트 아이디"),
                         fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("유저 아이디"),
                         fieldWithPath("data.email").type(JsonFieldType.STRING).description("작성자 이메일"),
                         fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("생성 시간"),
@@ -292,7 +294,7 @@ class RestDocsTest extends RestDocsSupport {
             .body(postEditDto)
             .filter(document("post-edit",
                             preprocessRequest(
-                                modifyUris().scheme("http").host("localhost").removePort(),
+                                modifyUris().scheme("http").host("localhost").port(8081),
                                 prettyPrint()
                             ),
                             preprocessResponse(prettyPrint()),
@@ -300,7 +302,7 @@ class RestDocsTest extends RestDocsSupport {
                                 headerWithName("Authorization").description("인증 토큰")
                             ),
                             queryParameters(
-                                parameterWithName("userId").description("작성자 이메일")
+                                parameterWithName("userId").description("유저 아이디")
                             ),
                             pathParameters(
                               parameterWithName("postId").description("포스팅 아이디")
@@ -312,6 +314,7 @@ class RestDocsTest extends RestDocsSupport {
                             responseFields(
                                 fieldWithPath("time").ignored(),
                                 fieldWithPath("data.title").type(JsonFieldType.STRING).description("수정된 제목"),
+                                fieldWithPath("data.postId").type(JsonFieldType.NUMBER).description("포스트 아이디"),
                                 fieldWithPath("data.content").type(JsonFieldType.STRING).description("수정된 내용"),
                                 fieldWithPath("data.email").type(JsonFieldType.STRING).description("작성자 이메일"),
                                 fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("유저 아이디"),
@@ -350,7 +353,7 @@ class RestDocsTest extends RestDocsSupport {
             .body(postEditDto)
             .filter(document("post-edit-error",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint())
@@ -378,7 +381,7 @@ class RestDocsTest extends RestDocsSupport {
             .log().all()
             .filter(document("post-get",
                 preprocessRequest(
-                    modifyUris().scheme("http").host("localhost").removePort(),
+                    modifyUris().scheme("http").host("localhost").port(8081),
                     prettyPrint()
                 ),
                 preprocessResponse(prettyPrint()),
@@ -388,6 +391,7 @@ class RestDocsTest extends RestDocsSupport {
                 responseFields(
                     fieldWithPath("time").ignored(),
                     fieldWithPath("data.title").type(JsonFieldType.STRING).description("제목"),
+                    fieldWithPath("data.postId").type(JsonFieldType.NUMBER).description("포스트 아이디"),
                     fieldWithPath("data.content").type(JsonFieldType.STRING).description("내용"),
                     fieldWithPath("data.email").type(JsonFieldType.STRING).description("작성자 이메일"),
                     fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("유저 아이디"),
@@ -428,7 +432,7 @@ class RestDocsTest extends RestDocsSupport {
             .queryParam("page", 1)
             .filter(document("post-page",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint()),
@@ -477,7 +481,7 @@ class RestDocsTest extends RestDocsSupport {
             .queryParam("size",5)
             .filter(document("post-page2",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint()),
@@ -526,7 +530,7 @@ class RestDocsTest extends RestDocsSupport {
             .queryParam("sort",Sort.ASC)
             .filter(document("post-page3",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint()),
@@ -569,7 +573,7 @@ class RestDocsTest extends RestDocsSupport {
             .queryParam("userId", user.getId())
             .filter(document("post-delete",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint()),
@@ -606,7 +610,7 @@ class RestDocsTest extends RestDocsSupport {
             .queryParam("userId", 12312L)
             .filter(document("post-delete-error",
                     preprocessRequest(
-                        modifyUris().scheme("http").host("localhost").removePort(),
+                        modifyUris().scheme("http").host("localhost").port(8081),
                         prettyPrint()
                     ),
                     preprocessResponse(prettyPrint())
