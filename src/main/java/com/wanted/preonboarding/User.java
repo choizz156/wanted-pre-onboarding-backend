@@ -40,7 +40,8 @@ public class User extends BaseEntity {
     private final Set<Post> posts = new HashSet<>();
 
     @Builder
-    public User(final String email, final String password) {
+    public User(final Long id, final String email, final String password) {
+        this.id = id;
         this.email = email;
         this.password = password;
     }

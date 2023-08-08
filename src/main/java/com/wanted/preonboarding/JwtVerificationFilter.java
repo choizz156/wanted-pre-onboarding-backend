@@ -128,7 +128,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
             new UsernamePasswordAuthenticationToken(username, null, authorityList);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.info("{}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
     }
 
     private boolean isRequestRefreshToken(final HttpServletRequest request) {

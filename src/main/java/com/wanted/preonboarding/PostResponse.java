@@ -10,6 +10,7 @@ import lombok.Data;
 @JsonInclude(Include.NON_NULL)
 public class PostResponse {
 
+    private long postId;
     private String title;
     private String content;
     private String email;
@@ -19,6 +20,7 @@ public class PostResponse {
 
     @Builder
     private PostResponse(
+        final Long postId,
         final String title,
         final String content,
         final String email,
@@ -26,6 +28,7 @@ public class PostResponse {
         final LocalDateTime createdAt,
         final LocalDateTime modifiedAt
     ) {
+        this.postId = postId;
         this.title = title;
         this.content = content;
         this.email = email;
@@ -36,6 +39,7 @@ public class PostResponse {
 
     public static PostResponse of(Post post) {
         return PostResponse.builder()
+            .postId(post.getId())
             .title(post.getTitle())
             .content(post.getContent())
             .email(post.getUserEmail())

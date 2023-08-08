@@ -6,7 +6,7 @@ import lombok.Builder;
 public record MultiResponseDto<T>(
     LocalDateTime time,
     int page,
-    Integer size,
+    int size,
     Sort sort,
     T data
 ) {
@@ -15,13 +15,13 @@ public record MultiResponseDto<T>(
     public MultiResponseDto(
         final LocalDateTime time,
         final int page,
-        final Integer size,
+        final int size,
         final Sort sort,
         final T data
     ) {
         this.time = time;
         this.page = page;
-        this.size = (size == null ? 10 : size);
+        this.size = size;
         this.sort = (sort == null ? Sort.DESC : Sort.ASC);
         this.data = data;
     }

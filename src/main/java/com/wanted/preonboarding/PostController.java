@@ -60,7 +60,7 @@ public class PostController {
         @RequestParam(required = false) Sort sort
     ) {
         List<PostResponse> lists = queryPostService.getLists(page, size, sort);
-        return MultiResponseDto.of(page, size, sort, lists);
+        return MultiResponseDto.of(page, lists.size(), sort, lists);
     }
 
     @DeleteMapping("/{postId}")
