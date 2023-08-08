@@ -6,7 +6,7 @@ spring:
   datasource:
     username: choizz
     password: 1234
-    url: jdbc:mysql://localhost:33306/onboarding
+    url: jdbc:mysql://db:3306/onboarding
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 jwt:
@@ -14,5 +14,4 @@ jwt:
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 50
 
-server:
-  port: 8081
+

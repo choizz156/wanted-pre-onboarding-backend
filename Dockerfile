@@ -1,18 +1,19 @@
-FROM eclipse-temurin:17.0.8_7-jdk-focal
+FROM gradle:jdk17 AS build-stage
 
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY src src
+WORKDIR /app
 
-RUN chmod +x ./gradlew
+COPY --chown=gradle:gradle . /app
+
 RUN ./gradlew clean build
 
+FROM eclipse-temurin:17.0.8_7-jdk-focal
+
+WORKDIR /app
+
 ARG JAR_FILE="build/libs/*.jar"
-COPY ${JAR_FILE} app.jar
+COPY --from=build-stage /app/$JAR_FILE app.jar
 
 ARG PROFILE="local"
-ENV SPRING_PROFILES_ACTIVE=${PROFILE}
+ENV SPRING_PROFILES_ACTIVE=$PROFILE
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]

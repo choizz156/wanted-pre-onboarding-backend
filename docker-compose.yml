@@ -13,12 +13,11 @@ services:
       - '--collation-server=utf8mb4_unicode_ci'
 
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
       MYSQL_DATABASE: onboarding
       MYSQL_USER: choizz
-      MYSQL_PASSWORD: 1234
-      TZ: Aisa/Seoul
-
+      MYSQL_PASSWORD: ${PASSWORD}
+      TZ: Asia/Seoul
 
 
   db-admin:
@@ -31,11 +30,11 @@ services:
       - ADMINER_DESIGN=hydra
       - ADMINER_PLUGINS=tables-filter tinymce
 
-#  app:
-#    container_name: onboarding-app
-#    build: ./
-#    restart: always
-#    ports:
-#      - '8081:8080'
-#    depends_on:
-#      - db
+  app:
+    container_name: onboarding-app
+    build: ./
+    restart: always
+    ports:
+      - '8081:8080'
+    depends_on:
+      - db
