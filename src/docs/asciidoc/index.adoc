@@ -19,8 +19,8 @@ endif::[]
 | `local`
 | http://localhost:8081
 
-| `production`
-|
+| `service`
+| https://choizz-onboarding.p-e.kr
 |===
 
 == Authentication

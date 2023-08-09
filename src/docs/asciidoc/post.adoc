@@ -14,6 +14,7 @@ include::{snippets}/post/response-fields.adoc[]
 ---
 === `posting 수정`
 - 해당 포스팅 작성자만이 수정 가능합니다.
+
 ==== **Http Request**
 include::{snippets}/post-edit/http-request.adoc[]
 include::{snippets}/post-edit/request-headers.adoc[]
@@ -27,7 +28,9 @@ include::{snippets}/post-edit/response-fields.adoc[]
 
 ---
 ==== `posting 수정 예외`
-- 작성자가 아닌 타인이 수정할 경우 NOT_MATCH_OWNER 예외가 발생합니다.
+
+- 작성자와 인증 토큰이 같으나 유저 아이디가 다른 경우 => NOT_MATCH_OWNER
+- 토큰이 작성자의 정보와 인증 토큰 정보가 다른 경우 => Forbidden
 
 ==== **Http Request**
 include::{snippets}/post-edit-error/http-request.adoc[]
