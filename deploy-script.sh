@@ -6,9 +6,9 @@ txtpur='\033[1;35m'
 txtgrn='\033[1;32m'
 txtgrey='\033[1;30m'
 
-echo -e "${txtpur} =================================="
+echo -e "${txtpur} =============================="
 echo -e "${txtpur} <<<<<<스크립트>>>>>>"
-echo -e "${txtpur}==================================${txtgrn}"
+echo -e "${txtpur}===============================${txtgrn}"
 
 EXECUTION_PATH=$(pwd)
 SHELL_SCRIPT_PATH=$(dirname $0)
