@@ -31,7 +31,7 @@ services:
 
   app:
     container_name: onboarding-app
-    build: ./
+    build: ./DockerfileLocal
     restart: always
     ports:
       - '8081:8080'
