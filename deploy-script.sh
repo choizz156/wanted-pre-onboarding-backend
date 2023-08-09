@@ -33,7 +33,7 @@ function check_branch() {
     echo "[$(date)] 할게 없음"
     exit 1
   else
-    git diff --color=always --color-words
+    git diff
   fi
 }
 
