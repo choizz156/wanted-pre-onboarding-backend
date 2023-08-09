@@ -1,0 +1,5 @@
+FROM nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY fullchain.pem /etc/letsencrypt/live/pre-onboarding.kro.kr/fullchain.pem
+COPY privkey.pem /etc/letsencrypt/live/pre-onboarding.kro.kr/privkey.pem
