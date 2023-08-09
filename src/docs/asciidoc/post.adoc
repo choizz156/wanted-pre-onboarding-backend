@@ -12,8 +12,8 @@ include::{snippets}/post/http-response.adoc[]
 include::{snippets}/post/response-fields.adoc[]
 
 ---
-=== `posting 수정(작성자만이 수정 가능)`
-
+=== `posting 수정`
+- 해당 포스팅 작성자만이 수정 가능합니다.
 ==== **Http Request**
 include::{snippets}/post-edit/http-request.adoc[]
 include::{snippets}/post-edit/request-headers.adoc[]
@@ -26,7 +26,9 @@ include::{snippets}/post-edit/http-response.adoc[]
 include::{snippets}/post-edit/response-fields.adoc[]
 
 ---
-==== `posting 수정 예외 (다른 작성자가 수정)`
+==== `posting 수정 예외`
+- 작성자가 아닌 타인이 수정할 경우 NOT_MATCH_OWNER 예외가 발생합니다.
+
 ==== **Http Request**
 include::{snippets}/post-edit-error/http-request.adoc[]
 
@@ -45,7 +47,18 @@ include::{snippets}/post-get/response-fields.adoc[]
 
 ---
 ==== `(2) 여러 개 조회`
-==== null일 경우 파라미터 기본값
+- page 파라미터가 1보다 작을 경우 예외가 발생합니다.
+```json
+{
+    "time": "2023-08-09T07:08:12.046862",
+    "data": {
+        "status": 400,
+        "msg": "paging.page: must be greater than or equal to 1"
+    }
+}
+```
+
+===== 파라미터가 null일 경우 파라미터 기본값
 |===
 | parameter | default
 
@@ -56,6 +69,7 @@ include::{snippets}/post-get/response-fields.adoc[]
 | DESC
 |===
 
+---
 ==== **Http Request**
 include::{snippets}/post-page/http-request.adoc[]
 include::{snippets}/post-page/query-parameters.adoc[]
@@ -66,6 +80,9 @@ include::{snippets}/post-page/http-response.adoc[]
 ---
 
 ==== `(3) 여러 개 조회(size 지정)`
+- size를 지정할 수 있습니다.
+- 최대 사이즈는 50이며, 10 이하를 지정하면 10으로 지정됩니다.
+
 ==== **Http Request**
 include::{snippets}/post-page2/http-request.adoc[]
 include::{snippets}/post-page2/query-parameters.adoc[]
@@ -74,7 +91,9 @@ include::{snippets}/post-page2/query-parameters.adoc[]
 include::{snippets}/post-page2/http-response.adoc[]
 ---
 
-=== `(4) 여러개 조회(오래된 순)`
+==== `(4) 여러개 조회(오래된 순)`
+- sort를 ASC로 설정합니다.
+
 ==== **Http Request**
 include::{snippets}/post-page3/http-request.adoc[]
 include::{snippets}/post-page3/query-parameters.adoc[]
@@ -84,7 +103,9 @@ include::{snippets}/post-page3/http-response.adoc[]
 ---
 
 
-=== `posting 삭제(작성자만 삭제 가능)`
+=== `posting 삭제`
+- 작성자만 삭제 가능합니다.
+
 ==== **Http Request**
 include::{snippets}/post-delete/http-request.adoc[]
 include::{snippets}/post-delete/request-headers.adoc[]
@@ -94,6 +115,8 @@ include::{snippets}/post-delete/path-parameters.adoc[]
 include::{snippets}/post-delete/http-response.adoc[]
 ---
 ==== `posting 삭제 예외`
+- 작성자가 아닌 타인이 삭제를 시도할 경우 NOT_MATCH_OWNER 예외가 발생합니다.
+
 ==== **Http Request**
 include::{snippets}/post-delete-error/http-request.adoc[]
 
