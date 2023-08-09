@@ -238,9 +238,9 @@ class PostApiTest extends ApiTest {
         //@formatter:off
         given()
                 .log().all()
-                .queryParam("page", 0)
+                .queryParam("page", 1)
                 .queryParam("size",20)
-                .queryParam("sort",Sort.ASC)
+                .queryParam("sort", Sort.ASC)
         .when()
                 .get("/posts")
         .then()
@@ -253,8 +253,38 @@ class PostApiTest extends ApiTest {
 
     }
 
+    @DisplayName("사용자가 size를 50이상 으로 지정할 경우 50개의 사이즈 크기가 내려온다.")
+    @Test
+    void pagination3() throws Exception {
+        IntStream.range(0, 60).forEach(
+            i -> {
+                PostCreateDto postCreateDto = fixtureMonkey.giveMeBuilder(PostCreateDto.class)
+                    .set("title", "title" + i)
+                    .set("content", "content" + i)
+                    .sample();
+                postService.posting(user.getId(), postCreateDto);
+            }
+        );
 
-    private String login(){
+        //@formatter:off
+        given()
+                .log().all()
+                .queryParam("page", 1)
+                .queryParam("size",60)
+        .when()
+                .get("/posts")
+        .then()
+                .log().all()
+                .body("data", hasSize(50))
+                .body("data[0].title",equalTo("title59"))
+                .body("data[49].title",equalTo("title10"))
+                .statusCode(HttpStatus.OK.value());
+        //@formatter:on
+
+    }
+
+
+    private String login() {
         //given
         user = userService.signUp(new JoinDto("test@gmail.com", "1234456778"));
         LoginDto loginDto = new LoginDto("test@gmail.com", "1234456778");

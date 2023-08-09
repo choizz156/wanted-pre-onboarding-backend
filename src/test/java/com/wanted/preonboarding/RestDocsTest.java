@@ -503,7 +503,7 @@ class RestDocsTest extends RestDocsSupport {
             .get("/posts")
         .then()
             .log().all()
-            .body("data", hasSize(5))
+            .body("data", hasSize(10))
             .body("data[0].title",equalTo("title29"))
             .body("data[4].title",equalTo("title25"))
             .statusCode(HttpStatus.OK.value());
@@ -525,8 +525,8 @@ class RestDocsTest extends RestDocsSupport {
         //@formatter:off
         given(super.spec)
             .log().all()
-            .queryParam("page", 0)
-            .queryParam("size",20)
+            .queryParam("page", 1)
+            .queryParam("size",15)
             .queryParam("sort",Sort.ASC)
             .filter(document("post-page3",
                     preprocessRequest(
@@ -552,9 +552,9 @@ class RestDocsTest extends RestDocsSupport {
             .get("/posts")
         .then()
             .log().all()
-            .body("data", hasSize(20))
+            .body("data", hasSize(15))
             .body("data[0].title",equalTo("title0"))
-            .body("data[19].title",equalTo("title19"))
+            .body("data[14].title",equalTo("title14"))
             .statusCode(HttpStatus.OK.value());
         //@formatter:on
 
