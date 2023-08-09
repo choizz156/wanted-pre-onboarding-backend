@@ -7,7 +7,7 @@ services:
       - ./db-data:/var/lib/mysql
     restart: always
     ports:
-      - '33306:3306'
+      - '3306:3306'
     command:
       - '--character-set-server=utf8mb4'
       - '--collation-server=utf8mb4_unicode_ci'
@@ -31,7 +31,7 @@ services:
 
   app:
     container_name: onboarding-app
-    build: ./DockerfileLocal
+    build: docker
     restart: always
     ports:
       - '8081:8080'
