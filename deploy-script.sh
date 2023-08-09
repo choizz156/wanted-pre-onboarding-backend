@@ -40,7 +40,8 @@ function check_branch() {
 function check_pull() {
   if [[ $pull = y ]]; then
     echo "git pull"
-    git pull origin $BRANCH --recurse-submodules
+    git pull origin $BRANCH
+    git submodule update --recursive
   else
     echo "=======exit============"
     exit 1
