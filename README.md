@@ -213,9 +213,9 @@ services:
 - Restful API를 만들기 위해 Spring Boot MVC를 사용했습니다.
 - 구체적인 비지니스 로직 예외를 두기 위해 RuntimeExcpetion을 상속하여 BusinessLoginException을 따로 만들어 사용했습니다.
 - 불변 객체 타입인 `record`를 사용하여 Dto를 구현했습니다.
-
+---
  ### 1️⃣ 사용자 회원가입 엔드 포인트
-- `POST https://choizz-onboarding.p-e.kr/users`
+`POST https://choizz-onboarding.p-e.kr/users`
 
  #### (1) 회원 가입
 - UserController에서 email과 password를 Request Body로 받습니다.
@@ -336,9 +336,11 @@ public class ErrorResponse {
 </div>
 </details>
 
+</br>
+
 
 ### 2️⃣ 사용자 로그인 엔드 포인트
-- `POST https://choizz-onboarding.p-e.kr/users/login`
+`POST https://choizz-onboarding.p-e.kr/users/login`
 
 #### (1) 로그인 (JWT 사용)
 - Spring Security를 사용하여 로그인 기능을 구현하였습니다.
@@ -366,16 +368,18 @@ HTTP/1.1 401 Unauthorized
 }
 ```
 
-
+</br>
 
 ### 3️⃣ 새로운 게시글을 생성하는 엔드포인트
-- `POST https://choizz-onboarding.p-e.kr/posts?userId={userId}`
+`POST https://choizz-onboarding.p-e.kr/posts?userId={userId}`
 
 #### (1) 포스팅 생성
 -  PostController에서 Request body의 title과 content를 받습니다.
 -  PostService에서 포스팅을 저장하고, Post 객체와 User 간의 연관관계를 맺어 관리합니다.
 
 > User 객체와 Post 객체는 1:N 관계를 맺습니다.
+
+</br>
 
 ### 4️⃣ 게시글 목록을 조회하는 엔드포인트
 - `GET http://localhost:8081/posts?page={page}&size={size}&sort={sort}"`
@@ -415,17 +419,21 @@ public class PostRepositoryImpl implements QueryPostRepository {
 
 > 포스팅을 생성, 수정, 삭제하는 역할을 하는 PostService와,
 > 조회만 하는 QueryPostService를 구별했습니다.
-    - @Transcation과 @Transcation과(readOnly = true)를 분리를 의도했습니다.
+> - @Transcation과 @Transcation과(readOnly = true)를 분리를 의도했습니다.
+
+</br>
+
+
 ### 5️⃣ 특정 게시글을 조회하는 엔드포인트
-- `GET http://localhost:8081/posts/{postId}"`
+`GET http://localhost:8081/posts/{postId}"`
 
 #### (1) 특정 게시글 조회
 - postId를 path에 넣으면 해당 postId를 가진 포스팅을 조회합니다.
 
-
+</br>
 
 ### 6️⃣ 특정 게시글을 수정하는 엔드포인트
-- `PATCH http://localhost:8081/posts/{postId}?userId={userId}"`
+`PATCH http://localhost:8081/posts/{postId}?userId={userId}"`
 
 #### (1) 작성자만이 포스팅 수정
 - PostController에서 Request body의 수정할 title과 content를 받습니다. 
@@ -439,6 +447,7 @@ public class PostRepositoryImpl implements QueryPostRepository {
 ```
 - 만약 작성자가 아닌 타인이 포스팅 수정 시도 시 NOT_MATCHING_OWNER 예외를 던집니다.
 
+</br>
 
 ### 7️⃣ 특정 게시글을 삭제하는 엔드포인트
 `DELETE http://localhost:8081/posts/{postId}?userId={userId}`
