@@ -36,6 +36,92 @@
 
 ![](https://github.com/choizz156/choizz156/blob/60ce9c63985b8db12a4d3dbbf67cd454689db855/imagesFile/aws%20%E1%84%8B%E1%85%A1%E1%84%8F%E1%85%B5%E1%84%90%E1%85%A6%E1%86%A8%E1%84%8E%E1%85%A7.png)
 
+- **쉘 스크립트를 활용한 배포 자동화**
+  - 쉘 스크립트를 사용하여 배포를 자동화했습니다.
+
+    <details>
+    <summary> # Deploy-scripty.sh </summary>  
+    <div markdown="1">
+    
+    ```bash
+    #!/bin/bash
+    
+    txtred='\033[1;31m'
+    txtlw='\033[1;33m'
+    txtpur='\033[1;35m'
+    txtgrn='\033[1;32m'
+    txtgrey='\033[1;30m'
+    
+    echo -e "${txtpur} =============================="
+    echo -e "${txtpur} <<<<<<스크립트>>>>>>"
+    echo -e "${txtpur}===============================${txtgrn}"
+    
+    EXECUTION_PATH=$(pwd)
+    SHELL_SCRIPT_PATH=$(dirname $0)
+    BRANCH=$1
+    PROFILE=$2
+    JAR=$3
+    
+    echo ""
+    echo -e "${txtlw} 쉘 경로 : ${SHELL_SCRIPT_PATH}"
+    echo -e "${txtgrey}실행 경로 : ${EXECUTION_PATH}"
+    echo -e "${txtpur} 쉘 이름:$0 브랜치 이름 :  $BRANCH ${txtred} 적용 프로파일 : $PROFILE"
+    echo "$JAR"
+    echo -e "${txtpur}==============================${txtgrn}"
+    
+    function check_branch() {
+    
+      git fetch
+      MASTER=$(git rev-parse $BRANCH)
+      REMOTE=$(git rev-parse origin/$BRANCH)
+    
+      if [ $MASTER == $REMOTE ]; then
+        echo "[$(date)] 할게 없음"
+        exit 1
+      else
+        git diff
+      fi
+    }
+    
+    function check_pull() {
+      if [[ $pull = y ]]; then
+        echo "git pull"
+        git pull origin $BRANCH
+        git submodule update --recursive
+      else
+        echo "=======exit============"
+        exit 1
+      fi
+    }
+    
+    JAVA_PID=$(pgrep -f java)
+    
+    function shutdown() {
+      kill -9 $JAVA_PID
+      sleep 1
+      echo -e "${txtpur}============================ ${JAVA_PID} ${txtlw}"
+    }
+    
+    function deploy() {
+      nohup java -jar -Dspring.profiles.active=${PROFILE} ${JAR} 1> web.log 2>&1 &
+      echo -e "${txtgrn}============finish deploying!========$(pgrep -f java)"
+    }
+    
+    check_branch
+    
+    echo -n "do you want git pull (y/else): "
+    read pull
+    echo "your answer is $pull"
+    
+    check_pull
+    shutdown
+    deploy
+    
+    ```
+    </div>
+    </details>
+
+
 - **letsencrypt를 사용한 Https 적용**
     - docker와 nignx를 통한 `reverse proxy`를 적용해, TLS를 설정했습니다.
     - 80 포트, 443 포트를 통해 들어오는 모든 요청은 https 요청으로 리다이렉트 합니다.
@@ -43,7 +129,7 @@
 
 ![image](https://github.com/choizz156/wanted-pre-onboarding-backend/assets/106965005/9631f47c-e69a-4ae1-9c95-1988444c9b80)
 
-  </br>
+ 
   <details>
   <summary> # DockerFileNginx </summary>  
   <div markdown="1">
@@ -100,6 +186,8 @@
 
   </div>
   </details>
+
+
 
 ---
 
