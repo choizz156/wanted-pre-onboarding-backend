@@ -198,7 +198,6 @@
 
 ## 🖥 Run App
 ### docker-comopose 사용 (Local)
-- 로컬 환경에서 docker-compose를 이용해 애플리케이션을 수행할 수 있습니다.
 - git clone을 받습니다.
     - 데이터베이스 비밀번호 등의 보안을 위해 `git submodules`을 사용했습니다. 따라서, clone시 `--recurse-submodules`을 붙여줘야 합니다.
     - `git clone --recurse-submodules https://github.com/choizz156/wanted-pre-onboarding-backend.git`
