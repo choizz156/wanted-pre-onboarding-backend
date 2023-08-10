@@ -23,6 +23,7 @@
 - Spring Data JPA, QueryDsl , MySQL 8.0
 - Spring Rest Docs
 - AWS (EC2, RDS), Docker
+- Git, Github
 
 
 ## 🚀 Architecture
