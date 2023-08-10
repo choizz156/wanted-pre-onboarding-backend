@@ -26,11 +26,11 @@
 
 
 ## 🚀 Architecture
-- **VPC를 설정하고, subnetting을** 통해 네트워크를 효율적으로 관리합니다.
+- **VPC를 설정하고, subnetting을** 통해 네트워크를 효율적으로 관리했습니다.
     - public subnet으로 관리망(Bastion), 서비스망(Service), private subnet으로 RDS를 관리합니다.
 - **Bastion Server**
     - Bastion Server를 통해 서비스의 정상 트래픽과 관리자용 트랙픽을 구분할 수 있게 했습니다.
-    - 22번 포트의 보안이 뚫린다면 서비스에 심각한 문제가 발생할 수 있기 때문에 Bastion Server를 통해 서비스에 영향을 최소화하게 했습니다.
+    - 22번 포트의 보안이 뚫린다면 서비스에 심각한 문제가 발생할 수 있기 때문에 Bastion Server를 통해서만 ssh 접근이 가능하게 하여 서비스에 영향을 최소화하게 했습니다.
 
 ![](https://github.com/choizz156/choizz156/blob/60ce9c63985b8db12a4d3dbbf67cd454689db855/imagesFile/aws%20%E1%84%8B%E1%85%A1%E1%84%8F%E1%85%B5%E1%84%90%E1%85%A6%E1%86%A8%E1%84%8E%E1%85%A7.png)
 
