@@ -213,8 +213,7 @@ services:
 - Restful API를 만들기 위해 Spring Boot MVC를 사용했습니다.
 - 구체적인 비지니스 로직 예외를 두기 위해 RuntimeExcpetion을 상속하여 BusinessLoginException을 따로 만들어 사용했습니다.
 - 불변 객체 타입인 `record`를 사용하여 Dto를 구현했습니다.
----
-### 📌 User API
+
  ### 1️⃣ 사용자 회원가입 엔드 포인트
 - `POST https://choizz-onboarding.p-e.kr/users`
 
@@ -366,12 +365,8 @@ HTTP/1.1 401 Unauthorized
     }
 }
 ```
----
 
-### 📌 Post API
-- 포스팅을 생성, 수정, 삭제할 경우에는 헤더에 Access Token이 있어야합니다.
-- 포스팅을 생성, 수정, 삭제하는 역할을 하는 PostService와, 조회만 하는 QueryPostService를 구별했습니다.
-    - @Transcation과 @Transcation과(readOnly = true)를 분리를 의도했습니다.
+
 
 ### 3️⃣ 새로운 게시글을 생성하는 엔드포인트
 - `POST https://choizz-onboarding.p-e.kr/posts?userId={userId}`
@@ -418,7 +413,9 @@ public class PostRepositoryImpl implements QueryPostRepository {
 </div>
 </details>
 
-
+> 포스팅을 생성, 수정, 삭제하는 역할을 하는 PostService와,
+> 조회만 하는 QueryPostService를 구별했습니다.
+    - @Transcation과 @Transcation과(readOnly = true)를 분리를 의도했습니다.
 ### 5️⃣ 특정 게시글을 조회하는 엔드포인트
 - `GET http://localhost:8081/posts/{postId}"`
 
