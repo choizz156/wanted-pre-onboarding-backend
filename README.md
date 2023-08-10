@@ -203,7 +203,13 @@ services:
 </details>
 
 ---
+## 😁 API 데모 영상
 
+[영상 링크](https://drive.google.com/file/d/1K1NQymb-lwMAp92w6FR1SxcXPzFzlSy5/view?usp=sharing)
+(약 5분, 설명을 하면서 API 테스트를 하였습니다. 어설플 수 있습니다..)
+
+
+---
 ## 🔗 Development
 ### 공통 적용 기능
 - JPA 
