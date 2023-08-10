@@ -40,7 +40,8 @@
     - 80 포트, 443 포트를 통해 들어오는 모든 요청은 https 요청으로 리다이렉트 합니다.
         - `docker run -d --rm --name proxy -p 80:80 -p 443:443 -v '/etc/letsencrypt:/etc/letsencrypt' reverse-proxy`
 
-![](https://github.com/choizz156/choizz156/blob/60ce9c63985b8db12a4d3dbbf67cd454689db855/imagesFile/web%20%E1%84%8B%E1%85%A1%E1%84%8F%E1%85%B5%E1%84%90%E1%85%A6%E1%86%A8%E1%84%8E%E1%85%A7.png)
+![image](https://github.com/choizz156/wanted-pre-onboarding-backend/assets/106965005/9631f47c-e69a-4ae1-9c95-1988444c9b80)
+
   </br>
   <details>
   <summary> # DockerFileNginx </summary>  
