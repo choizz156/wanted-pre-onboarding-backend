@@ -13,7 +13,7 @@ WORKDIR /app
 ARG JAR_FILE="build/libs/*.jar"
 COPY --from=build-stage /app/$JAR_FILE app.jar
 
-ARG PROFILE="prod"
+ARG PROFILE="local"
 ENV SPRING_PROFILES_ACTIVE=$PROFILE
 
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
