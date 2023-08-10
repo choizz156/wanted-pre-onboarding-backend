@@ -5,7 +5,12 @@
 
 ## 👩🏽‍💻 Author
 
-### 최민석
+### 🌱 최민석 | 백엔드
+
+
+- 커뮤니케이션과 피드백을 통해 부족한 점을 빠르게 파악하고 보완하려고 노력합니다!
+- 주어진 환경에 빠르게 적응할 수 있습니다! 
+- 유지/보수하기 좋은 설계를 추구하고 쉽게 읽히는 코드를 짜려고 고민합니다!
 
 
 
@@ -19,16 +24,15 @@
 - Spring Rest Docs
 - AWS (EC2, RDS), Docker
 
+
 ## 🚀 Architecture
-- VPC를 설정하고, subnetting을 통해 네트워크를 효율적으로 관리합니다.
+- **VPC를 설정하고, subnetting을** 통해 네트워크를 효율적으로 관리합니다.
     - public subnet으로 관리망(Bastion), 서비스망(Service), private subnet으로 RDS를 관리합니다.
-- Bastion Server
+- **Bastion Server**
     - Bastion Server를 통해 서비스의 정상 트래픽과 관리자용 트랙픽을 구분할 수 있게 했습니다.
     - 22번 포트의 보안이 뚫린다면 서비스에 심각한 문제가 발생할 수 있기 때문에 Bastion Server를 통해 서비스에 영향을 최소화하게 했습니다.
-- RDS 사용
-    - MySQL을 사용했습니다.
-- letsencrypt를 사용한 Https 적용
-    - docker와 nignx를 통한 reverse proxy를 적용해, TLS를 설정했습니다.
+- **letsencrypt를 사용한 Https 적용**
+    - docker와 nignx를 통한 `reverse proxy`를 적용해, TLS를 설정했습니다.
     - 80 포트, 443 포트를 통해 들어오는 모든 요청은 https 요청으로 리다이렉트 합니다.
         - `docker run -d --rm --name proxy -p 80:80 -p 443:443 -v '/etc/letsencrypt:/etc/letsencrypt' reverse-proxy`
 
@@ -98,7 +102,7 @@
 ### docker-comopose 사용 (Local)
 - 로컬 환경에서 docker-compose를 이용해 애플리케이션을 수행할 수 있습니다.
 - git clone을 받습니다.
-    - 데이터베이스 비밀번호 등의 보안을 위해 git submodules을 사용했습니다. 따라서, clone시 `--recurse-submodules`을 붙여줘야 합니다.
+    - 데이터베이스 비밀번호 등의 보안을 위해 `git submodules`을 사용했습니다. 따라서, clone시 `--recurse-submodules`을 붙여줘야 합니다.
     - `git clone --recurse-submodules https://github.com/choizz156/wanted-pre-onboarding-backend.git`
 - http://localhost:8081 주소를 사용합니다.
 - POST, GET , DELETE 등 HTTP 메서드를 사용하여 엔드포인드를 호출할 수 있습니다.
@@ -108,9 +112,7 @@
 ```bash
 ./run.sh
 
-혹은
-
-docker-compose -p pre-onboarding-backend --env-file src/main/resources/config/.env up -d
+//docker-compose -p pre-onboarding-backend --env-file src/main/resources/config/.env up -d
 
 ```
 
@@ -200,6 +202,7 @@ services:
     - 코드의 가독성이 높아지고 유지 보수 및 리팩토링에 유리합니다.
 - Restful API를 만들기 위해 Spring Boot MVC를 사용했습니다.
 - 구체적인 비지니스 로직 예외를 두기 위해 RuntimeExcpetion을 상속하여 BusinessLoginException을 따로 만들어 사용했습니다.
+- 불변 객체 타입인 `record`를 사용하여 Dto를 구현했습니다.
 ---
 ### 📌 User API
 
@@ -238,7 +241,7 @@ public enum ExceptionCode {
 - Spring Validation에서 검증을 위해 제공하는 애노테이션이 있지만 요구 사항에 맞게 하기 위해 정규표현식을 사용했습니다.
 - 만약 유효하지 않는다면, 표준 에러 응답 객체를 활용하여 MethodArgumentNotValidException 예외를 던집니다.
     - 예외가 발생할 경우, Spring의 Exception Handler를 사용하여 예외를 처리합니다. 
-    - 객체 생성에 필요한 파라미터가 다르기 때문에, 정적 팩토리를 사용해 에러 응답 객체를 생성할 수 있게 했습니다.
+    - 객체 생성에 필요한 파라미터가 다르기 때문에, `정적 팩토리 메서드`를 사용해 에러 응답 객체를 생성할 수 있게 했습니다.
 <details>
 <summary> # ErrorResponse</summary>
 <div markdown="1">
@@ -371,7 +374,7 @@ HTTP/1.1 401 Unauthorized
 `GET http://localhost:8081/posts?page={page}&size={size}&sort={sort}"`
 
 (1) 게시글 목록 조회
- - 게시글 목록을 DB로 부터 조회해 오는 로직은 QueryDsl을 사용했습니다.
+ - 게시글 목록을 DB로 부터 조회해 오는 로직은 `QueryDsl`을 사용했습니다.
     - 페이지네이션 로직을 구현하는 객체를 만들고 그 로직을 적용하기에 QueryDsl을 사용하는 것이 적합하다고 판단했습니다.   
         - ex) size의 최소 값은 10입니다. 즉, size가 10 이하로 들어온다고 하더라도 10으로 설정하는 로직이 필요합니다.
     - Pageable 객체는 테이블의 count를 세는 query가 추가되는데, 현재로선, count를 세는 쿼리를 날릴 필요가 없다고 생각해 QueryDsl을 통해 직접 페이지네이션했습니다.
@@ -432,7 +435,7 @@ public class PostRepositoryImpl implements QueryPostRepository {
 - 만약 작성자가 아닌 타인이 포스팅 삭제 시도 시 NOT_MATCHING_OWNER 예외를 던집니다.
 
 ### 📌 Test Code
- Junit5와 RestAssured를 사용하여 약 50개의 통합 테스트 및 인수 테스트를 작성했습니다.
+ `Junit5와 RestAssured`를 사용하여 약 50개의 통합 테스트 및 인수 테스트를 작성했습니다.
 - Repository 레이어와 Service 레이어를 통합하여 테스트를 했습니다.
 - 인수 테스트의 경우 BDD 스타일을 사용하는 RestAssured가 가독성이 좋다고 판단해 선택했습니다.
 
