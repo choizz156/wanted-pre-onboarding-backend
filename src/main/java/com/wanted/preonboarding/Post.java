@@ -2,10 +2,12 @@ package com.wanted.preonboarding;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +21,10 @@ public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @ManyToOne
