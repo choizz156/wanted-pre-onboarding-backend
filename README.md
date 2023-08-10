@@ -27,6 +27,7 @@
 
 
 ## 🚀 Architecture
+`https://choizz-onboarding.p-e.kr`
 - **VPC를 설정하고, subnetting을** 통해 네트워크를 효율적으로 관리했습니다.
     - public subnet으로 관리망(Bastion), 서비스망(Service), private subnet으로 RDS를 관리합니다.
 - **Bastion Server**
