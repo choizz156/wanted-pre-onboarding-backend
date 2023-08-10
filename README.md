@@ -389,7 +389,7 @@ HTTP/1.1 401 Unauthorized
 </br>
 
 ### 4️⃣ 게시글 목록을 조회하는 엔드포인트
-- `GET http://localhost:8081/posts?page={page}&size={size}&sort={sort}"`
+`GET http://localhost:8081/posts?page={page}&size={size}&sort={sort}"`
 
 #### (1) 게시글 목록 조회
  - 게시글 목록을 DB로 부터 조회해 오는 로직은 `QueryDsl`을 사용했습니다.
